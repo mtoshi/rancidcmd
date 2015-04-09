@@ -1,0 +1,7 @@
+[MASTER]
+load-plugins=
+
+[MESSAGES CONTROL]
+disable=
+    invalid-name,
+    no-member

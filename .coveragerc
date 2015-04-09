@@ -1,0 +1,10 @@
+[run]
+source=
+    rancidcmd/
+omit=
+    */__*,
+    */tests/*,
+    */migrations/*
+
+[html]
+directory=docs/htmlcov
