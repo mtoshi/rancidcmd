@@ -24,6 +24,7 @@ class RancidCmd(object):
         self.user = kwargs['user']
         self.password = kwargs['password']
         self.address = kwargs['address']
+        self.encoding = 'utf-8'
         RancidCmd.check_cloginrc()
 
     def clogin_cmd(self, command):
@@ -58,6 +59,10 @@ class RancidCmd(object):
         print('"[error] Not support "%s"' % command)
         return False
 
+    def decode_bytes(self, byte_data):
+        """ decode bytes """
+        return byte_data.decode(self.encoding)
+
     def cmd_exec(self, command):
         """ command execute """
         proc = Popen(command,
@@ -65,7 +70,8 @@ class RancidCmd(object):
                      stdout=PIPE,
                      stderr=PIPE)
         std_out, std_err = proc.communicate()
-        return {'std_out': std_out, 'std_err': std_err}
+        return {'std_out': self.decode_bytes(std_out),
+                'std_err': self.decode_bytes(std_err)}
 
     def execute(self, command):
         """ execute """

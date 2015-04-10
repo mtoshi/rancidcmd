@@ -95,7 +95,7 @@ class UnitTests(unittest.TestCase):
     def test_cmd_exec(self):
         """ test for command execute """
         res = self.rancid_clogin.cmd_exec('echo test')
-        self.assertEqual(res, {'std_out': b'test\n', 'std_err': b''})
+        self.assertEqual(res, {'std_out': 'test\n', 'std_err': ''})
 
     def test_touch(self):
         """ test for file touch """
@@ -116,3 +116,10 @@ class UnitTests(unittest.TestCase):
             os.remove(path)
         self.assertEqual(is_exists, True)
         self.assertEqual(mode, 33216)  # oct(33216) == '0o100700'
+
+    def test_decode_bytes(self):
+        """ test for decode bytes """
+        test_str = 'abcdABCD01234$&=+-*%[]#!/"@'
+        byte_data = str.encode(test_str)
+        decod_data = self.rancid_clogin.decode_bytes(byte_data)
+        self.assertEqual(decod_data, test_str)
