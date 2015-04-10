@@ -31,6 +31,21 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.rancid_clogin.method, 'clogin')
         self.assertEqual(self.rancid_jlogin.method, 'jlogin')
 
+    def test_timeout_value(self):
+        """ test for timeout value """
+
+        obj = self.rancid_jlogin = RancidCmd(
+            method='clogin', user='rancid',
+            password='password', address='192.168.1.2')
+        self.assertEqual(obj.timeout, 10)
+
+        timeout = 20
+        obj = self.rancid_jlogin = RancidCmd(
+            timeout=timeout,
+            method='clogin', user='rancid',
+            password='password', address='192.168.1.2')
+        self.assertEqual(obj.timeout, timeout)
+
     def test_cmd_token(self):
         """ test for command token """
         cmd = 'clogin -t 10 -u "rancid" -p "password" -e "password" -c "show version" 192.168.1.1'  # NOQA
@@ -95,7 +110,7 @@ class UnitTests(unittest.TestCase):
     def test_cmd_exec(self):
         """ test for command execute """
         res = self.rancid_clogin.cmd_exec('echo test')
-        self.assertEqual(res, {'std_out': b'test\n', 'std_err': b''})
+        self.assertEqual(res, {'std_out': 'test\n', 'std_err': ''})
 
     def test_touch(self):
         """ test for file touch """
@@ -116,3 +131,10 @@ class UnitTests(unittest.TestCase):
             os.remove(path)
         self.assertEqual(is_exists, True)
         self.assertEqual(mode, 33216)  # oct(33216) == '0o100700'
+
+    def test_decode_bytes(self):
+        """ test for decode bytes """
+        test_str = 'abcdABCD01234$&=+-*%[]#!/"@'
+        byte_data = str.encode(test_str)
+        decod_data = self.rancid_clogin.decode_bytes(byte_data)
+        self.assertEqual(decod_data, test_str)

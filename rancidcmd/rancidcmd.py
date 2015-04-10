@@ -20,10 +20,11 @@ class RancidCmd(object):
     def __init__(self, **kwargs):
         """ init """
         self.method = kwargs['method']
-        self.timeout = kwargs['timeout']
         self.user = kwargs['user']
         self.password = kwargs['password']
         self.address = kwargs['address']
+        self.timeout = kwargs.get('timeout', 10)
+        self.encoding = 'utf-8'
         RancidCmd.check_cloginrc()
 
     def clogin_cmd(self, command):
@@ -55,8 +56,12 @@ class RancidCmd(object):
 
             return self.clogin_cmd(command)
 
-        print('"[error] Not support "%s"' % command)
+        print('"[error] Not support "%s"' % self.method)
         return False
+
+    def decode_bytes(self, byte_data):
+        """ decode bytes """
+        return byte_data.decode(self.encoding)
 
     def cmd_exec(self, command):
         """ command execute """
@@ -65,7 +70,8 @@ class RancidCmd(object):
                      stdout=PIPE,
                      stderr=PIPE)
         std_out, std_err = proc.communicate()
-        return {'std_out': std_out, 'std_err': std_err}
+        return {'std_out': self.decode_bytes(std_out),
+                'std_err': self.decode_bytes(std_err)}
 
     def execute(self, command):
         """ execute """
@@ -76,7 +82,7 @@ class RancidCmd(object):
 
             return self.cmd_exec(rancid_cmd)
 
-        print('[error] Could not execute "%s"' % command)
+        print('[error] Could not execute')
 
     @staticmethod
     def touch(path):
