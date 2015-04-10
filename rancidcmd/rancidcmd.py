@@ -56,7 +56,7 @@ class RancidCmd(object):
 
             return self.clogin_cmd(command)
 
-        print('"[error] Not support "%s"' % command)
+        print('"[error] Not support "%s"' % self.method)
         return False
 
     def decode_bytes(self, byte_data):
@@ -82,7 +82,7 @@ class RancidCmd(object):
 
             return self.cmd_exec(rancid_cmd)
 
-        print('[error] Could not execute "%s"' % command)
+        print('[error] Could not execute')
 
     @staticmethod
     def touch(path):
