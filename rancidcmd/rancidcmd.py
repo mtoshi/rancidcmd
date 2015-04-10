@@ -20,10 +20,10 @@ class RancidCmd(object):
     def __init__(self, **kwargs):
         """ init """
         self.method = kwargs['method']
-        self.timeout = kwargs['timeout']
         self.user = kwargs['user']
         self.password = kwargs['password']
         self.address = kwargs['address']
+        self.timeout = kwargs.get('timeout', 10)
         self.encoding = 'utf-8'
         RancidCmd.check_cloginrc()
 

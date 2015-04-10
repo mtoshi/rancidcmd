@@ -31,6 +31,21 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.rancid_clogin.method, 'clogin')
         self.assertEqual(self.rancid_jlogin.method, 'jlogin')
 
+    def test_timeout_value(self):
+        """ test for timeout value """
+
+        obj = self.rancid_jlogin = RancidCmd(
+            method='clogin', user='rancid',
+            password='password', address='192.168.1.2')
+        self.assertEqual(obj.timeout, 10)
+
+        timeout = 20
+        obj = self.rancid_jlogin = RancidCmd(
+            timeout=timeout,
+            method='clogin', user='rancid',
+            password='password', address='192.168.1.2')
+        self.assertEqual(obj.timeout, timeout)
+
     def test_cmd_token(self):
         """ test for command token """
         cmd = 'clogin -t 10 -u "rancid" -p "password" -e "password" -c "show version" 192.168.1.1'  # NOQA
