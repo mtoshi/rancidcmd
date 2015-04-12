@@ -8,6 +8,7 @@ tests.test_rancid
 
 import unittest
 import os
+import uuid
 from rancidcmd.rancidcmd import RancidCmd
 
 
@@ -114,7 +115,7 @@ class UnitTests(unittest.TestCase):
 
     def test_touch(self):
         """ test for file touch """
-        path = "./_test_touch_file.txt"
+        path = '%s.txt' % uuid.uuid4()
         RancidCmd.touch(path)
         is_exists = os.path.isfile(path)
         if is_exists:
