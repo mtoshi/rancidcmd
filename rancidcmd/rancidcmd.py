@@ -8,7 +8,7 @@ rancidcmd
 from subprocess import Popen
 from subprocess import PIPE
 import shlex
-import sys
+# import sys
 import re
 import os
 import stat
@@ -92,8 +92,9 @@ class RancidCmd(object):
             with open(path, 'a'):
                 os.utime(path, None)
                 os.chmod(path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
-        except PermissionError:
-            sys.exit('[error] Could not write "%s".' % path)
+        except:
+            print('[error] Could not write "%s".' % path)
+            raise
 
     @staticmethod
     def check_cloginrc(name='.cloginrc'):

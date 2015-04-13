@@ -9,6 +9,7 @@ tests.test_rancid
 import unittest
 import os
 import uuid
+import stat
 from rancidcmd.rancidcmd import RancidCmd
 
 
@@ -121,6 +122,19 @@ class UnitTests(unittest.TestCase):
         if is_exists:
             os.remove(path)
         self.assertEqual(is_exists, True)
+
+    def test_touch_permission_error(self):
+        """ test for file touch permission error """
+
+        try:
+            path = '%s.txt' % uuid.uuid4()
+            with open(path, 'a'):
+                os.utime(path, None)
+                os.chmod(path, stat.S_IRUSR | stat.S_IXUSR)
+            with self.assertRaises(Exception):
+                RancidCmd.touch(path)
+        finally:
+            os.remove(path)
 
     def test_check_cloginrc(self):
         """ test for check cloginrc """
