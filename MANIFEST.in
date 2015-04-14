@@ -2,5 +2,7 @@ include MANIFEST.in
 include README.rst
 include LICENSE
 include requirements.txt
+include docs/htmlcov/*
+include docs/build/html/*
 recursive-include docs *.rst
 recursive-include rancidcmd *.py *.txt
