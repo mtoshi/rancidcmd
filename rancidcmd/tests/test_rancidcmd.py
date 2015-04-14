@@ -20,97 +20,150 @@ class UnitTests(unittest.TestCase):
 
     def setUp(self):
         """setup."""
-        self.rancid_clogin = RancidCmd(
-            method='clogin', timeout=10,
-            user='rancid', password='password',
+        self.obj1 = RancidCmd(
+            method='clogin', user='rancid',
+            password='password', enable_password='enable_password',
             address='192.168.1.1')
 
-        self.rancid_jlogin = RancidCmd(
-            method='jlogin', timeout=10,
-            user='rancid', password='password',
+        self.obj2 = RancidCmd(
+            method='clogin', user='rancid', timeout=10,
+            password='password', enable_password='enable_password',
             address='192.168.1.2')
 
-    def test_rancid(self):
-        """Check login method."""
-        self.assertEqual(self.rancid_clogin.method, 'clogin')
-        self.assertEqual(self.rancid_jlogin.method, 'jlogin')
+        self.obj3 = RancidCmd(
+            method='jlogin', timeout=20,
+            user='rancid', password='password',
+            address='192.168.1.3')
 
-    def test_timeout_value(self):
-        """check timeout value."""
-        obj = self.rancid_jlogin = RancidCmd(
-            method='clogin', user='rancid',
-            password='password', address='192.168.1.2')
-        self.assertEqual(obj.timeout, 10)
+    def test_init(self):
+        """check init value."""
+        self.assertEqual(self.obj1.method, 'clogin')
+        self.assertEqual(self.obj1.user, 'rancid')
+        self.assertEqual(self.obj1.password, 'password')
+        self.assertEqual(self.obj1.enable_password, 'enable_password')
+        self.assertEqual(self.obj1.address, '192.168.1.1')
+        self.assertEqual(self.obj1.timeout, 10)
+        self.assertEqual(self.obj1.encoding, 'utf-8')
 
-        timeout = 20
-        obj = self.rancid_jlogin = RancidCmd(
-            timeout=timeout,
-            method='clogin', user='rancid',
-            password='password', address='192.168.1.2')
-        self.assertEqual(obj.timeout, timeout)
+        self.assertEqual(self.obj2.method, 'clogin')
+        self.assertEqual(self.obj2.user, 'rancid')
+        self.assertEqual(self.obj2.password, 'password')
+        self.assertEqual(self.obj2.enable_password, 'enable_password')
+        self.assertEqual(self.obj2.address, '192.168.1.2')
+        self.assertEqual(self.obj2.timeout, 10)
+        self.assertEqual(self.obj2.encoding, 'utf-8')
+
+        self.assertEqual(self.obj3.method, 'jlogin')
+        self.assertEqual(self.obj3.user, 'rancid')
+        self.assertEqual(self.obj3.password, 'password')
+        self.assertEqual(self.obj3.enable_password, None)
+        self.assertEqual(self.obj3.address, '192.168.1.3')
+        self.assertEqual(self.obj3.timeout, 20)
+        self.assertEqual(self.obj3.encoding, 'utf-8')
 
     def test_cmd_token(self):
         """Check command line split."""
-        cmd = 'clogin -t 10 -u "rancid" -p "password" -e "password" -c "show version" 192.168.1.1'  # NOQA
-        cmd_args = self.rancid_clogin.cmd_token(cmd)
-        self.assertEqual(cmd_args, ['clogin',
-                                    '-t',
-                                    '10',
-                                    '-u',
-                                    'rancid',
-                                    '-p',
-                                    'password',
-                                    '-e',
-                                    'password',
-                                    '-c',
-                                    'show version',
-                                    '192.168.1.1'])
+        cmd1 = ['clogin',
+                '-t',
+                '10',
+                '-u',
+                'rancid',
+                '-p',
+                'password',
+                '-e',
+                'enable_password',
+                '-c',
+                '"show version"',
+                '192.168.1.1']
 
-    def test_generate_rancid_cmd(self):
-        """Check rancid command format."""
+        cmd2 = ['clogin',
+                '-t',
+                '10',
+                '-u',
+                'rancid',
+                '-p',
+                'password',
+                '-e',
+                'enable_password',
+                '-c',
+                'show version',
+                '192.168.1.1']
+
+        cmd_str = " ".join(cmd1)
+
+        cmd_args = self.obj1.cmd_token(cmd_str)
+        self.assertEqual(cmd_args, cmd2)
+
+    def _test_generate_cmd(self):
+        """Check command format."""
         cmd = 'show version'
 
         # clogin
-        rancid_cmd = self.rancid_clogin.generate_rancid_cmd(cmd)
+        rancid_cmd = self.obj1.generate_cmd(cmd)
         self.assertEqual(
             rancid_cmd,
-            'clogin -t 10 -u "rancid" -p "password" -e "password" -c "show version" 192.168.1.1')  # NOQA
+            " ".join(['clogin',
+                      '-t',
+                      '10',
+                      '-u',
+                      'rancid',
+                      '-p',
+                      'password',
+                      '-e',
+                      'enable_password',
+                      '-c',
+                      'show version',
+                      '192.168.1.1']))
+
+        # clogin
+        rancid_cmd = self.obj1.generate_cmd(cmd)
+        self.assertEqual(
+            rancid_cmd,
+            " ".join(['clogin',
+                      '-t',
+                      '10',
+                      '-u',
+                      'rancid',
+                      '-p',
+                      'password',
+                      '-e',
+                      'enable_password',
+                      '-c',
+                      'show version',
+                      '192.168.1.2']))
 
         # jlogin
-        rancid_cmd = self.rancid_jlogin.generate_rancid_cmd(cmd)
+        rancid_cmd = self.obj3.generate_cmd(cmd)
         self.assertEqual(
             rancid_cmd,
-            'jlogin -t 10 -u "rancid" -p "password" -c "show version" 192.168.1.2')  # NOQA
-
-        # None support
-        rancid_xlogin = RancidCmd(
-            method='xlogin', timeout=10,
-            user='rancid', password='password',
-            address='192.168.1.99')
-
-        rancid_cmd = rancid_xlogin.generate_rancid_cmd(cmd)
-        self.assertEqual(rancid_cmd, False)
-
-    def test_clogin_cmd(self):
-        """Check clogin command format."""
-        cmd = 'show version'
-        cmd = self.rancid_clogin.clogin_cmd(cmd)
-        self.assertEqual(
-            cmd,
-            'clogin -t 10 -u "rancid" -p "password" -e "password" -c "show version" 192.168.1.1')  # NOQA
-
-    def test_jlogin_cmd(self):
-        """Check jlogin command format."""
-        cmd = 'show version'
-        cmd = self.rancid_jlogin.jlogin_cmd(cmd)
-        self.assertEqual(
-            cmd,
-            'jlogin -t 10 -u "rancid" -p "password" -c "show version" 192.168.1.2')  # NOQA
+            " ".join(['clogin',
+                      '-t',
+                      '30',
+                      '-u',
+                      'rancid',
+                      '-p',
+                      'password',
+                      '-c',
+                      'show version',
+                      '192.168.1.3']))
 
     def test_cmd_exec(self):
         """Check excecuter result."""
-        res = self.rancid_clogin.cmd_exec('echo test')
+        res = self.obj1.cmd_exec('echo test')
         self.assertEqual(res, {'std_out': 'test\n', 'std_err': ''})
+
+    def test_execute(self):
+        """Check excecute."""
+        obj = RancidCmd(method='clogin',
+                        user='admin',
+                        password='password',
+                        address='127.0.0.1')
+        res = obj.execute('show version')
+        if res['std_err'] == '':
+            self.assertNotEqual(res['std_out'], '')
+        error = {'std_out': '',
+                 'std_err': '/bin/sh: clogin: command not found\n'}
+        self.assertEqual(res, error)
 
     def test_touch(self):
         """Check make file."""
@@ -148,5 +201,5 @@ class UnitTests(unittest.TestCase):
         """Check byte and str changing."""
         test_str = 'abcdABCD01234$&=+-*%[]#!/"@'
         byte_data = str.encode(test_str)
-        decod_data = self.rancid_clogin.decode_bytes(byte_data)
+        decod_data = self.obj1.decode_bytes(byte_data)
         self.assertEqual(decod_data, test_str)

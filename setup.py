@@ -55,7 +55,7 @@ with open('requirements.txt', 'w') as _file:
 
 setup(
     name="rancidcmd",
-    version="0.1.0",
+    version="0.1.1",
     description='Rancid Command Wrapper Tool',
     long_description='',
     author='mtoshi',
