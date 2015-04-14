@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-rancidcmd
-=========
 
-"""
+"""RancidCmd."""
 
 from subprocess import Popen
 from subprocess import PIPE
@@ -14,11 +11,15 @@ import stat
 
 
 class RancidCmd(object):
-    """ The :class:`RancidCmd <RancidCmd>` object.
+
+    """The :class:`RancidCmd <RancidCmd>` object.
+
+    RancidCmd
+
     """
 
     def __init__(self, **kwargs):
-        """ init """
+        """Parameters: method, user, passwrod, address, [timeout]."""
         self.method = kwargs['method']
         self.user = kwargs['user']
         self.password = kwargs['password']
@@ -28,26 +29,23 @@ class RancidCmd(object):
         RancidCmd.check_cloginrc()
 
     def clogin_cmd(self, command):
-        """ clogin command """
-
+        """For cloign format."""
         return '%s -t %s -u "%s" -p "%s" -e "%s" -c "%s" %s' % (
             self.method, self.timeout, self.user,
             self.password, self.password, command, self.address)
 
     def jlogin_cmd(self, command):
-        """ jlogin command """
-
+        """For jloign format."""
         return '%s -t %s -u "%s" -p "%s" -c "%s" %s' % (
             self.method, self.timeout, self.user,
             self.password, command, self.address)
 
     def cmd_token(self, command):
-        """ command token """
+        """Split one line command."""
         return shlex.split(command)
 
     def generate_rancid_cmd(self, command):
-        """ generate rancid command """
-
+        """Assign login command with initialized method."""
         if re.search("jlogin$", self.method):
 
             return self.jlogin_cmd(command)
@@ -60,11 +58,11 @@ class RancidCmd(object):
         return False
 
     def decode_bytes(self, byte_data):
-        """ decode bytes """
+        """Change string with encoding setting."""
         return byte_data.decode(self.encoding)
 
     def cmd_exec(self, command):
-        """ command execute """
+        """Login and command execution."""
         proc = Popen(command,
                      shell=True,
                      stdout=PIPE,
@@ -74,26 +72,26 @@ class RancidCmd(object):
                 'std_err': self.decode_bytes(std_err)}
 
     def execute(self, command):
-        """ execute """
-
+        """Command execution."""
         rancid_cmd = self.generate_rancid_cmd(command)
-
         if rancid_cmd:
-
             return self.cmd_exec(rancid_cmd)
-
         print('[error] Could not execute')
 
     @staticmethod
     def touch(path):
-        """ touch """
-        with open(path, 'a'):
-            os.utime(path, None)
-            os.chmod(path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
+        """Make empty file."""
+        try:
+            with open(path, 'a'):
+                os.utime(path, None)
+                os.chmod(path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
+        except:
+            print('[error] Could not write "%s".' % path)
+            raise
 
     @staticmethod
     def check_cloginrc(name='.cloginrc'):
-        """ check cloginrc """
+        """Check rancid settings file (default: .cloginrc)."""
         home = os.environ['HOME']
         path = '%s/%s' % (home, name)
         if not os.path.isfile(path):
