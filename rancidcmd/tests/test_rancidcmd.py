@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-tests.test_rancid
-==================
 
-"""
+"""UnitTests for rancidcmd."""
 
 
 import unittest
@@ -14,10 +11,15 @@ from rancidcmd.rancidcmd import RancidCmd
 
 
 class UnitTests(unittest.TestCase):
-    """ Unit Test """
+
+    """The :class:`UnitTests <UnitTests>` object.
+
+    UnitTests
+
+    """
 
     def setUp(self):
-        """ setup """
+        """setup."""
         self.rancid_clogin = RancidCmd(
             method='clogin', timeout=10,
             user='rancid', password='password',
@@ -29,13 +31,12 @@ class UnitTests(unittest.TestCase):
             address='192.168.1.2')
 
     def test_rancid(self):
-        """ test rancid """
+        """Check login method."""
         self.assertEqual(self.rancid_clogin.method, 'clogin')
         self.assertEqual(self.rancid_jlogin.method, 'jlogin')
 
     def test_timeout_value(self):
-        """ test for timeout value """
-
+        """check timeout value."""
         obj = self.rancid_jlogin = RancidCmd(
             method='clogin', user='rancid',
             password='password', address='192.168.1.2')
@@ -49,7 +50,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(obj.timeout, timeout)
 
     def test_cmd_token(self):
-        """ test for command token """
+        """Check command line split."""
         cmd = 'clogin -t 10 -u "rancid" -p "password" -e "password" -c "show version" 192.168.1.1'  # NOQA
         cmd_args = self.rancid_clogin.cmd_token(cmd)
         self.assertEqual(cmd_args, ['clogin',
@@ -66,8 +67,7 @@ class UnitTests(unittest.TestCase):
                                     '192.168.1.1'])
 
     def test_generate_rancid_cmd(self):
-        """ test for generate rancid command """
-
+        """Check rancid command format."""
         cmd = 'show version'
 
         # clogin
@@ -92,8 +92,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(rancid_cmd, False)
 
     def test_clogin_cmd(self):
-        """ test for clogin command """
-
+        """Check clogin command format."""
         cmd = 'show version'
         cmd = self.rancid_clogin.clogin_cmd(cmd)
         self.assertEqual(
@@ -101,8 +100,7 @@ class UnitTests(unittest.TestCase):
             'clogin -t 10 -u "rancid" -p "password" -e "password" -c "show version" 192.168.1.1')  # NOQA
 
     def test_jlogin_cmd(self):
-        """ test for jlogin command """
-
+        """Check jlogin command format."""
         cmd = 'show version'
         cmd = self.rancid_jlogin.jlogin_cmd(cmd)
         self.assertEqual(
@@ -110,12 +108,12 @@ class UnitTests(unittest.TestCase):
             'jlogin -t 10 -u "rancid" -p "password" -c "show version" 192.168.1.2')  # NOQA
 
     def test_cmd_exec(self):
-        """ test for command execute """
+        """Check excecuter result."""
         res = self.rancid_clogin.cmd_exec('echo test')
         self.assertEqual(res, {'std_out': 'test\n', 'std_err': ''})
 
     def test_touch(self):
-        """ test for file touch """
+        """Check make file."""
         path = '%s.txt' % uuid.uuid4()
         RancidCmd.touch(path)
         is_exists = os.path.isfile(path)
@@ -124,8 +122,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(is_exists, True)
 
     def test_touch_permission_error(self):
-        """ test for file touch permission error """
-
+        """Check file permission error."""
         try:
             path = '%s.txt' % uuid.uuid4()
             with open(path, 'a'):
@@ -137,7 +134,7 @@ class UnitTests(unittest.TestCase):
             os.remove(path)
 
     def test_check_cloginrc(self):
-        """ test for check cloginrc """
+        """Check cloginrc setting file."""
         name = '_test_cloginrc'
         path = RancidCmd.check_cloginrc(name=name)
         is_exists = os.path.isfile(path)
@@ -148,7 +145,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(mode, 33216)  # oct(33216) == '0o100700'
 
     def test_decode_bytes(self):
-        """ test for decode bytes """
+        """Check byte and str changing."""
         test_str = 'abcdABCD01234$&=+-*%[]#!/"@'
         byte_data = str.encode(test_str)
         decod_data = self.rancid_clogin.decode_bytes(byte_data)

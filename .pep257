@@ -1,0 +1,3 @@
+[pep257]
+verbose = true
+explain = true
