@@ -5,7 +5,6 @@
 from subprocess import Popen
 from subprocess import PIPE
 import shlex
-# import re
 import os
 import stat
 

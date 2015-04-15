@@ -7,12 +7,12 @@ import unittest
 import os
 import uuid
 import stat
-from rancidcmd.rancidcmd import RancidCmd
+from rancidcmd import RancidCmd
 
 
 class UnitTests(unittest.TestCase):
 
-    """The :class:`UnitTests <UnitTests>` object.
+    """The :class:`UnitTests <UnitTests>`.
 
     UnitTests
 
@@ -160,8 +160,10 @@ class UnitTests(unittest.TestCase):
                         address='127.0.0.1')
         res = obj.execute('show version')
         if res['std_err'] == '':
+            self.assertEqual(res['std_err'], '')
             self.assertNotEqual(res['std_out'], '')
-        self.assertNotEqual(res['std_out'], '')
+        self.assertNotEqual(res['std_err'], '')
+        self.assertEqual(res['std_out'], '')
 
     def test_touch(self):
         """Check make file."""

@@ -2,7 +2,7 @@
 
 """Racndicmd setup.py."""
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
 import os
 import sys
@@ -60,18 +60,20 @@ requires = ['sphinx']
 with open('requirements.txt', 'w') as _file:
     _file.write('\n'.join(requires))
 
+EXCLUDE_FROM_PACKAGES = []
+
 setup(
     name="rancidcmd",
     version="0.1.2",
     description='Rancid Command Wrapper Tool',
     long_description=README,
-    author='mtoshi',
+    author='Toshikatsu Murakoshi',
     author_email='mtoshi.g@gmail.com',
     url='https://github.com/mtoshi/rancidcmd',
     license='MIT',
     classifiers=classifiers,
-    packages=['rancidcmd'],
-    data_files=[],
+    packages=find_packages(exclude=EXCLUDE_FROM_PACKAGES),
+    py_modules=['rancidcmd'],
     install_requires=requires,
     include_package_data=True,
     tests_require=['tox'],

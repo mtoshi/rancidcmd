@@ -18,7 +18,7 @@ Requirements
 
 Installation
 =============
-Please install the Rancid in advance.
+#. Please install the Rancid in advance.
 
 For CentOS::
 
@@ -33,7 +33,7 @@ For MacOS X(Port)::
 
    $ port install rancid
 
-After Rancid, please install Rancidcmd::
+#. After Rancid, please install Rancidcmd::
 
    $ pip install rancidcmd
 
@@ -46,9 +46,52 @@ After Rancid, please install Rancidcmd::
 
 Using example
 ==============
-::
+Example cisco. ::
 
-   Sample codes.
+    >>> from rancidcmd import RancidCmd
+    >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/clogin',
+    ...                       user='rancid',
+    ...                       password='xxxx',
+    ...                       enable_password='xxxx',
+    ...                       timeout=10,
+    ...                       address='192.168.1.1')
+    >>> rancidcmd.execute("show version")
+
+Example junos. ::
+
+    >>> from rancidcmd import RancidCmd
+    >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/jlogin',
+    ...                       user='rancid',
+    ...                       password='xxxx',
+    ...                       timeout=30,
+    ...                       address='192.168.1.2')
+    >>> rancidcmd.execute("show version")
+
+RancidCmd() needs "login, user, password, enable_password, timeout, address".
+"enable_password" is not must for jlogin.
+"enable_password" default value is None.
+"timeout" is not must.
+"timeout" default value is 10(sec).
+
+Output format. ::
+
+    {'std_err': '', 'std_out': ''}
+
+Output sucess sample. ::
+
+    {'std_err': '', 'std_out': '... Copyright (c) 2002-2013, Cisco Systems, Inc. All ...'}
+
+Output error sample. (Not found "clogin") ::
+
+    {'std_err': '/bin/sh: clogin: command not fond\n', 'std_out': ''}
+
+Please see sample code.
+
+* http://github.com/mtoshi/rancidcmd/samples/sample.py
+
+
+If you want to use another settings(prompt, method, etc), please edit ".cloginrc" same with previus.
+
 
 
 See also
