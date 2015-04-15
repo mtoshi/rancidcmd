@@ -9,11 +9,13 @@ Why did I make this module? As everybody knows RANCID is popular as auto login s
 Of course I want to use RANCID and I thought want to use without password of ".cloginrc".
 Rancidcmd can use RANCID login command like a clogin with empty ".clgoinrc".
 
+.. image:: https://secure.travis-ci.org/mtoshi/rancidcmd.svg?branch=master
+   :target: http://travis-ci.org/mtoshi/rancidcmd
 
 Requirements
 =============
 
-- Python 2.7, 3.2, 3.4.
+- Python 2.7, 3.3, 3.4.
 
 
 Installation
