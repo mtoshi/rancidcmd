@@ -2,6 +2,14 @@
 rancidcmd
 ===================================================
 
+Rancidcmd is a utility tool for network operators.
+This module is wrapper of RANCID login commands.(like cloing, jlogin ...)
+So if you use this moudle, then you have to install RANCID in some way.
+Why did I make this module? As everybody knows RANCID is popular as auto login solutions.
+Of course I want to use RANCID and I thought want to use without password of ".cloginrc".
+Rancidcmd can use RANCID login command like a clogin with empty ".clgoinrc". 
+
+
 Requirements
 =============
 
