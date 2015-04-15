@@ -21,23 +21,23 @@ class UnitTests(unittest.TestCase):
     def setUp(self):
         """setup."""
         self.obj1 = RancidCmd(
-            method='clogin', user='rancid',
+            login='clogin', user='rancid',
             password='password', enable_password='enable_password',
             address='192.168.1.1')
 
         self.obj2 = RancidCmd(
-            method='clogin', user='rancid', timeout=10,
+            login='clogin', user='rancid', timeout=10,
             password='password', enable_password='enable_password',
             address='192.168.1.2')
 
         self.obj3 = RancidCmd(
-            method='jlogin', timeout=20,
+            login='jlogin', timeout=20,
             user='rancid', password='password',
             address='192.168.1.3')
 
     def test_init(self):
         """check init value."""
-        self.assertEqual(self.obj1.method, 'clogin')
+        self.assertEqual(self.obj1.login, 'clogin')
         self.assertEqual(self.obj1.user, 'rancid')
         self.assertEqual(self.obj1.password, 'password')
         self.assertEqual(self.obj1.enable_password, 'enable_password')
@@ -45,7 +45,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj1.timeout, 10)
         self.assertEqual(self.obj1.encoding, 'utf-8')
 
-        self.assertEqual(self.obj2.method, 'clogin')
+        self.assertEqual(self.obj2.login, 'clogin')
         self.assertEqual(self.obj2.user, 'rancid')
         self.assertEqual(self.obj2.password, 'password')
         self.assertEqual(self.obj2.enable_password, 'enable_password')
@@ -53,7 +53,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj2.timeout, 10)
         self.assertEqual(self.obj2.encoding, 'utf-8')
 
-        self.assertEqual(self.obj3.method, 'jlogin')
+        self.assertEqual(self.obj3.login, 'jlogin')
         self.assertEqual(self.obj3.user, 'rancid')
         self.assertEqual(self.obj3.password, 'password')
         self.assertEqual(self.obj3.enable_password, None)
@@ -154,7 +154,7 @@ class UnitTests(unittest.TestCase):
 
     def test_execute(self):
         """Check excecute."""
-        obj = RancidCmd(method='clogin',
+        obj = RancidCmd(login='clogin',
                         user='admin',
                         password='password',
                         address='127.0.0.1')

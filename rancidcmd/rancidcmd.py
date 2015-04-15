@@ -21,9 +21,9 @@ class RancidCmd(object):
     def __init__(self, **kwargs):
         """Constructor Parameters.
 
-        method, user, passwrod, enable_password, address, [timeout].
+        login, user, password, address, [enable_password], [timeout].
         """
-        self.method = kwargs['method']
+        self.login = kwargs['login']
         self.user = kwargs['user']
         self.password = kwargs['password']
         self.address = kwargs['address']
@@ -36,10 +36,10 @@ class RancidCmd(object):
         """Make login command."""
         if self.enable_password:
             return '%s -t %s -u "%s" -p "%s" -e "%s" -c "%s" %s' % (
-                self.method, self.timeout, self.user,
+                self.login, self.timeout, self.user,
                 self.password, self.enable_password, command, self.address)
         return '%s -t %s -u "%s" -p "%s" -c "%s" %s' % (
-            self.method, self.timeout, self.user,
+            self.login, self.timeout, self.user,
             self.password, command, self.address)
 
     def cmd_token(self, command):
