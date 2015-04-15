@@ -161,9 +161,7 @@ class UnitTests(unittest.TestCase):
         res = obj.execute('show version')
         if res['std_err'] == '':
             self.assertNotEqual(res['std_out'], '')
-        error = {'std_out': '',
-                 'std_err': '/bin/sh: clogin: command not found\n'}
-        self.assertEqual(res, error)
+        self.assertNotEqual(res['std_out'], '')
 
     def test_touch(self):
         """Check make file."""
