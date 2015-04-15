@@ -1,30 +1,32 @@
 # -*- coding: utf-8 -*-
-"""
-setup.py
-========
 
-"""
+"""Racndicmd setup.py."""
 
 from setuptools import setup
 from setuptools.command.test import test as TestCommand
+import os
 import sys
 
 
 class Tox(TestCommand):
-    """ Tox """
+
+    """Tox."""
 
     user_options = [('tox-args=', 'a', "Arguments to pass to tox")]
 
     def initialize_options(self):
+        """Init."""
         TestCommand.initialize_options(self)
         self.tox_args = None
 
     def finalize_options(self):
+        """Finalize."""
         TestCommand.finalize_options(self)
         self.test_args = []
         self.test_suite = True
 
     def run_tests(self):
+        """Run."""
         import tox
         import shlex
         if self.tox_args:
@@ -46,10 +48,15 @@ classifiers = [
     "Programming Language :: Python :: Implementation :: CPython",
     "Topic :: System :: Networking",
     "Topic :: System :: Networking :: Monitoring",
+    "Topic :: Utilities",
 ]
 
-requires = ['sphinx']
 
+here = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(here, 'README.rst')) as f:
+    README = f.read()
+
+requires = ['sphinx']
 with open('requirements.txt', 'w') as _file:
     _file.write('\n'.join(requires))
 
@@ -57,7 +64,7 @@ setup(
     name="rancidcmd",
     version="0.1.2",
     description='Rancid Command Wrapper Tool',
-    long_description='',
+    long_description=README,
     author='mtoshi',
     author_email='mtoshi.g@gmail.com',
     url='https://github.com/mtoshi/rancidcmd',
