@@ -20,33 +20,32 @@ Installation
 =============
 #. Please install the Rancid in advance.
 
-For CentOS::
+    For CentOS ::
 
-   $ yum install rancid
+        $ yum install rancid
 
+    For Debian, Ubuntu ::
 
-For Debian, Ubuntu::
+        $ apt-get install rancid
 
-   $ apt-get install rancid
+    For MacOS X(Port) ::
 
-For MacOS X(Port)::
+        $ port install rancid
 
-   $ port install rancid
+#. After Rancid, please install Rancidcmd ::
 
-#. After Rancid, please install Rancidcmd::
-
-   $ pip install rancidcmd
-
-   or
-
-   $ git clone https://github.com/mtoshi/rancidcmd
-   $ cd rancidcmd
-   $ sudo python setup.py install
+         $ pip install rancidcmd
+          
+         or
+          
+         $ git clone https://github.com/mtoshi/rancidcmd
+         $ cd rancidcmd
+         $ sudo python setup.py install
 
 
 Using example
 ==============
-Example cisco. ::
+Example for cisco(clogin). ::
 
     >>> from rancidcmd import RancidCmd
     >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/clogin',
@@ -57,7 +56,7 @@ Example cisco. ::
     ...                       address='192.168.1.1')
     >>> rancidcmd.execute("show version")
 
-Example junos. ::
+Example for junos(jlogin). ::
 
     >>> from rancidcmd import RancidCmd
     >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/jlogin',
@@ -67,11 +66,11 @@ Example junos. ::
     ...                       address='192.168.1.2')
     >>> rancidcmd.execute("show version")
 
-RancidCmd() needs "login, user, password, enable_password, timeout, address".
-"enable_password" is not must for jlogin.
-"enable_password" default value is None.
-"timeout" is not must.
-"timeout" default value is 10(sec).
+* RancidCmd() needs "login, user, password, enable_password, timeout, address".
+* "enable_password" is not must for jlogin.
+* "enable_password" default value is None.
+* "timeout" is not must.
+* "timeout" default value is 10(sec).
 
 Output format. ::
 
@@ -97,4 +96,3 @@ If you want to use another settings(prompt, method, etc), please edit ".cloginrc
 See also
 =========
 * http://www.shrubbery.net/rancid/
-* http://github.com/mtoshi/rancidcmd/
