@@ -11,6 +11,8 @@ Rancidcmd can use RANCID login command like a clogin with empty ".clgoinrc".
 
 .. image:: https://secure.travis-ci.org/mtoshi/rancidcmd.svg?branch=master
    :target: http://travis-ci.org/mtoshi/rancidcmd
+.. image:: https://coveralls.io/repos/mtoshi/rancidcmd/badge.svg?branch=coverall
+   :target: https://coveralls.io/r/mtoshi/rancidcmd?branch=coverall
 
 Requirements
 =============
