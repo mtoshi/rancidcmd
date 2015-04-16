@@ -15,7 +15,7 @@ Rancidcmd can use RANCID login command like a clogin with empty ".clgoinrc".
 Requirements
 =============
 
-- Python 2.7, 3.3, 3.4.
+- Python 2.7, 3.3, 3.4, PyPy
 
 
 Installation
