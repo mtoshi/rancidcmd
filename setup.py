@@ -65,7 +65,7 @@ EXCLUDE_FROM_PACKAGES = []
 
 setup(
     name="rancidcmd",
-    version="0.1.3",
+    version="0.1.4",
     description='Rancid Command Wrapper Tool',
     long_description=README,
     author='Toshikatsu Murakoshi',
