@@ -88,7 +88,7 @@ Output error sample. (Not found "clogin") ::
 
 Please see sample code.
 
-* http://github.com/mtoshi/rancidcmd/samples/sample.py
+* https://github.com/mtoshi/rancidcmd/blob/master/samples/sample.py
 
 
 If you want to use another settings(prompt, method, etc), please edit ".cloginrc" same with previus.
