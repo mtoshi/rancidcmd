@@ -51,7 +51,7 @@ Example for cisco(clogin). ::
 
     >>> from rancidcmd import RancidCmd
     >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/clogin',
-    ...                       user='rancid',
+    ...                       user='username',
     ...                       password='xxxx',
     ...                       enable_password='xxxx',
     ...                       timeout=10,
@@ -62,7 +62,7 @@ Example for junos(jlogin). ::
 
     >>> from rancidcmd import RancidCmd
     >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/jlogin',
-    ...                       user='rancid',
+    ...                       user='username',
     ...                       password='xxxx',
     ...                       timeout=30,
     ...                       address='192.168.1.2')
