@@ -13,6 +13,9 @@ Rancidcmd can use RANCID login command like a clogin with empty ".clgoinrc".
    :target: http://travis-ci.org/mtoshi/rancidcmd
 .. image:: https://coveralls.io/repos/mtoshi/rancidcmd/badge.svg?branch=coverall
    :target: https://coveralls.io/r/mtoshi/rancidcmd?branch=coverall
+.. image:: https://pypip.in/version/rancidcmd/badge.svg
+   :target: https://pypi.python.org/pypi/rancidcmd/
+   :alt: Latest Version
 
 Requirements
 =============
