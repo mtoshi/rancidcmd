@@ -6,8 +6,8 @@ Rancidcmd is a utility tool for network operators.
 This module is wrapper of RANCID login commands.(like cloing, jlogin ...)
 So if you use this moudle, then you have to install RANCID in some way.
 Why did I make this module? As everybody knows RANCID is popular as auto login solutions.
-Of course I want to use RANCID and I thought want to use without password of ".cloginrc".
-Rancidcmd can use RANCID login command like a clogin with empty ".clgoinrc".
+Of course I want to use RANCID. And I wanted to do using without password of ".cloginrc".
+This Rancidcmd can use RANCID login command like a clogin with empty ".clgoinrc".
 
 .. image:: https://secure.travis-ci.org/mtoshi/rancidcmd.svg?branch=master
    :target: http://travis-ci.org/mtoshi/rancidcmd
@@ -25,7 +25,7 @@ Requirements
 
 Installation
 =============
-#. Please install the Rancid in advance.
+#. Please install the RANCID in advance.
 
     For CentOS ::
 
@@ -39,7 +39,7 @@ Installation
 
         $ port install rancid
 
-#. After Rancid, please install Rancidcmd ::
+#. After RANCID, please install Rancidcmd ::
 
          $ pip install rancidcmd
           
@@ -49,6 +49,8 @@ Installation
          $ cd rancidcmd
          $ sudo python setup.py install
 
+* Care of "~/.cloginrc" existence is not necessary.
+    If executed user doesn't have "~/.cloginrc", then Rancidcmd makes empty "~/.cloginrc".
 
 Using example
 ==============
