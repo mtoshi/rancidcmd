@@ -56,7 +56,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with open(os.path.join(here, 'README.rst')) as f:
     README = f.read()
 
-requires = ['Sphinx']
+requires = []
 with open('requirements.txt', 'w') as _file:
     _file.write('\n'.join(requires))
 
@@ -64,8 +64,8 @@ EXCLUDE_FROM_PACKAGES = []
 
 setup(
     name="rancidcmd",
-    version="0.1.4",
-    description='Rancid Command Wrapper Tool',
+    version="0.1.5",
+    description='Rancid Command Wrapper.',
     long_description=README,
     author='Toshikatsu Murakoshi',
     author_email='mtoshi.g@gmail.com',
