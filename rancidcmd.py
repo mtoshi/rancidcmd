@@ -4,7 +4,6 @@
 
 from subprocess import Popen
 from subprocess import PIPE
-import shlex
 import os
 import stat
 
@@ -40,10 +39,6 @@ class RancidCmd(object):
         return '%s -t %s -u "%s" -p "%s" -c "%s" %s' % (
             self.login, self.timeout, self.user,
             self.password, command, self.address)
-
-    def cmd_token(self, command):
-        """Split one line command."""
-        return shlex.split(command)
 
     def decode_bytes(self, byte_data):
         """Change string with encoding setting."""
