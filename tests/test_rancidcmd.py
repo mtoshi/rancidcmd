@@ -61,39 +61,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj3.timeout, 20)
         self.assertEqual(self.obj3.encoding, 'utf-8')
 
-    def test_cmd_token(self):
-        """Check command line split."""
-        cmd1 = ['clogin',
-                '-t',
-                '10',
-                '-u',
-                'rancid',
-                '-p',
-                'password',
-                '-e',
-                'enable_password',
-                '-c',
-                '"show version"',
-                '192.168.1.1']
-
-        cmd2 = ['clogin',
-                '-t',
-                '10',
-                '-u',
-                'rancid',
-                '-p',
-                'password',
-                '-e',
-                'enable_password',
-                '-c',
-                'show version',
-                '192.168.1.1']
-
-        cmd_str = " ".join(cmd1)
-
-        cmd_args = self.obj1.cmd_token(cmd_str)
-        self.assertEqual(cmd_args, cmd2)
-
     def _test_generate_cmd(self):
         """Check command format."""
         cmd = 'show version'
