@@ -10,16 +10,47 @@ import stat
 
 class RancidCmd(object):
 
-    """The :class:`RancidCmd <RancidCmd>` object.
+    """Class RancidCmd.
 
-    RancidCmd
+    Attributes:
+
+        :login (str): RANCID login command(clogin, jlogin, etc).
+        :user (str): Login username.
+        :password (str): Login password.
+        :address (str): Host name or address.
+        :enable_password (str, optional): Enable password for clogin.
+            Default is None.
+        :timeout(int, optional): Timeout value(seconds).
+            Default is 10 seconds.
+        :encoding(str, optional): Encoding type.
+            Default is 'utf-8'.
+
+    Using example:
+
+        * Please see README.
+            https://github.com/mtoshi/rancidcmd/blob/master/README.rst
+
+        * Sample code.
+            https://github.com/mtoshi/rancidcmd/blob/master/samples/sample.py
 
     """
 
     def __init__(self, **kwargs):
-        """Constructor Parameters.
+        """Constructor.
 
-        login, user, password, address, [enable_password], [timeout].
+        Args:
+
+        :login (str): RANCID login command(clogin, jlogin, etc).
+        :user (str): Login username.
+        :password (str): Login password.
+        :address (str): Host name or address.
+        :enable_password (str, optional): Enable password for clogin.
+            Default is None.
+        :timeout(int, optional): Timeout value(seconds).
+            Default is 10 seconds.
+        :encoding(str, optional): Encoding type.
+            Default is 'utf-8'.
+
         """
         self.login = kwargs['login']
         self.user = kwargs['user']
