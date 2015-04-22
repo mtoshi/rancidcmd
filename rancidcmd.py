@@ -40,16 +40,16 @@ class RancidCmd(object):
 
         Args:
 
-        :login (str): RANCID login command(clogin, jlogin, etc).
-        :user (str): Login username.
-        :password (str): Login password.
-        :address (str): Host name or address.
-        :enable_password (str, optional): Enable password for clogin.
-            Default is None.
-        :timeout(int, optional): Timeout value(seconds).
-            Default is 10 seconds.
-        :encoding(str, optional): Encoding type.
-            Default is 'utf-8'.
+            :login (str): RANCID login command(clogin, jlogin, etc).
+            :user (str): Login username.
+            :password (str): Login password.
+            :address (str): Host name or address.
+            :enable_password (str, optional): Enable password for clogin.
+                Default is None.
+            :timeout(int, optional): Timeout value(seconds).
+                Default is 10 seconds.
+            :encoding(str, optional): Encoding type.
+                Default is 'utf-8'.
 
         """
         self.login = kwargs['login']
@@ -62,7 +62,26 @@ class RancidCmd(object):
         RancidCmd.check_cloginrc()
 
     def generate_cmd(self, command):
-        """Make login command."""
+        """Generate command.
+
+        Args:
+
+            :command (str): Example is "show version".
+
+        Returns:
+
+            :str: Return the command string.
+
+            If there is the "enable_password". ::
+
+                'clogin -t 10 -u admin -p password -e enable_password
+                    -c "show version"'
+
+            If you have not set the "enable_password". ::
+
+                'clogin -t 10 -u admin -p password -c "show version"'
+
+        """
         if self.enable_password:
             return '%s -t %s -u "%s" -p "%s" -e "%s" -c "%s" %s' % (
                 self.login, self.timeout, self.user,
@@ -86,7 +105,22 @@ class RancidCmd(object):
                 'std_err': self.decode_bytes(std_err)}
 
     def execute(self, command):
-        """Command execution."""
+        """Command execution.
+
+        Args:
+
+            :command (str): Example is "show version".
+
+        Returns:
+
+            :dict: Example is below. ::
+
+            {
+                'std_err': '',
+                'std_out': '',
+            }
+
+        """
         cmd = self.generate_cmd(command)
         return self.cmd_exec(cmd)
 
