@@ -137,9 +137,25 @@ class RancidCmd(object):
 
     @staticmethod
     def check_cloginrc(name='.cloginrc'):
-        """Check rancid settings file (default: .cloginrc)."""
+        """Check rancid settings file.
+
+        Note:
+
+            If RANCID settings file is not exists,
+            then make empty settings file.
+
+        Args:
+
+            :name (str, optional): RANCID settings file name.
+                 Default is ".cloginrc".
+
+        Returns:
+
+            :str: RANCID settings file path.
+
+        """
         home = os.environ['HOME']
-        path = '%s/%s' % (home, name)
+        path = os.path.join(home, name)
         if not os.path.isfile(path):
             RancidCmd.touch(path)
         return path
