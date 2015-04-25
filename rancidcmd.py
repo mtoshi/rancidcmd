@@ -74,12 +74,12 @@ class RancidCmd(object):
 
             If there is the "enable_password". ::
 
-                'clogin -t 10 -u admin -p password -e enable_password
+                'xlogin -t 10 -u admin -p password -e enable_password
                     -c "show version"'
 
             If you have not set the "enable_password". ::
 
-                'clogin -t 10 -u admin -p password -c "show version"'
+                'xlogin -t 10 -u admin -p password -c "show version"'
 
         """
         if self.enable_password:
@@ -91,11 +91,31 @@ class RancidCmd(object):
             self.password, command, self.address)
 
     def decode_bytes(self, byte_data):
-        """Change string with encoding setting."""
+        """Change string with encoding setting.
+
+        Args:
+
+            :byte_data (bytes): Popen output.
+
+        """
         return byte_data.decode(self.encoding)
 
     def cmd_exec(self, command):
-        """Login and command execution."""
+        """Login and command execution.
+
+        Args:
+
+            :command (str): Command for execution.
+
+        Returns:
+
+            :dict: Example is below. ::
+
+            {
+                'std_err': '',
+                'std_out': '',
+            }
+        """
         proc = Popen(command,
                      shell=True,
                      stdout=PIPE,
@@ -126,7 +146,13 @@ class RancidCmd(object):
 
     @staticmethod
     def touch(path):
-        """Make empty file."""
+        """Make empty file.
+
+        Args:
+
+           :path (str): File path.
+
+        """
         try:
             with open(path, 'a'):
                 os.utime(path, None)
