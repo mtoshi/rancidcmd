@@ -94,6 +94,14 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj5.option, '-d -x "commands.txt"')
         self.assertEqual(self.obj5.encoding, 'utf-8')
 
+    def test_is_option_x(self):
+        """Check command command option for "-x"."""
+        self.assertEqual(self.obj1.is_option_x(), False)
+        self.assertEqual(self.obj2.is_option_x(), False)
+        self.assertEqual(self.obj3.is_option_x(), False)
+        self.assertEqual(self.obj4.is_option_x(), False)
+        self.assertEqual(self.obj5.is_option_x(), True)
+
     def _test_generate_cmd(self):
         """Check command format."""
         cmd = 'show version'
@@ -174,8 +182,6 @@ class UnitTests(unittest.TestCase):
                       'rancid',
                       '-p',
                       'password',
-                      '-c',
-                      'show version',
                       '-x "commands.txt"',
                       '192.168.1.5']))
 

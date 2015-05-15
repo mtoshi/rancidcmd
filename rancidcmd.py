@@ -6,6 +6,7 @@ from subprocess import Popen
 from subprocess import PIPE
 from os.path import expanduser
 import os
+import re
 import stat
 
 
@@ -67,6 +68,20 @@ class RancidCmd(object):
         self.encoding = 'utf-8'
         RancidCmd.check_cloginrc()
 
+    def is_option_x(self):
+        """Check -x option.
+
+        "-c" gets commands from command-line.
+        "-x" gets commnads from file.
+
+        These are for command option and exclusive.
+        If "-x" option is specified, then "-c" command is ignored.
+        """
+        pat = re.compile(r'(\s+)?-x\s+')
+        if pat.search(self.option):
+            return True
+        return False
+
     def generate_cmd(self, command):
         """Generate command.
 
@@ -88,14 +103,16 @@ class RancidCmd(object):
                 'xlogin -t 10 -u admin -p password -c "show version"'
 
         """
-        if command != '':
-            command = ' -c "%s"' % command
+        if self.is_option_x():
+            command = ''
+        else:
+            command = '-c "%s"' % command
 
         enable_password = ''
         if self.enable_password:
-            enable_password = ' -e "%s"' % self.enable_password
+            enable_password = '-e "%s"' % self.enable_password
 
-        return '%s -t %s -u "%s" -p "%s"%s %s%s %s' % (
+        return '%s -t %s -u "%s" -p "%s" %s %s %s %s' % (
             self.login, self.timeout, self.user, self.password,
             enable_password, self.option, command, self.address)
 
