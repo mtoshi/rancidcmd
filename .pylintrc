@@ -3,6 +3,7 @@ load-plugins=
 
 [MESSAGES CONTROL]
 disable=
+    too-many-instance-attributes,
     superfluous-parens,
     invalid-name,
     no-member

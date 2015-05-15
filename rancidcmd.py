@@ -20,6 +20,8 @@ class RancidCmd(object):
         :address (str): Host name or address.
         :enable_password (str, optional): Enable password for clogin.
             Default is None.
+        :option(int, optional): Option example: '-d -x "commands.txt"'.
+            Default is ''.
         :timeout(int, optional): Timeout value(seconds).
             Default is 10 seconds.
         :encoding(str, optional): Encoding type.
@@ -46,6 +48,8 @@ class RancidCmd(object):
             :address (str): Host name or address.
             :enable_password (str, optional): Enable password for clogin.
                 Default is None.
+            :option(int, optional): Option example: '-d -x "commands.txt"'.
+                Default is ''.
             :timeout(int, optional): Timeout value(seconds).
                 Default is 10 seconds.
             :encoding(str, optional): Encoding type.
@@ -58,6 +62,7 @@ class RancidCmd(object):
         self.address = kwargs['address']
         self.enable_password = kwargs.get('enable_password', None)
         self.timeout = kwargs.get('timeout', 10)
+        self.option = kwargs.get('option', '')
         self.encoding = 'utf-8'
         RancidCmd.check_cloginrc()
 
@@ -83,12 +88,12 @@ class RancidCmd(object):
 
         """
         if self.enable_password:
-            return '%s -t %s -u "%s" -p "%s" -e "%s" -c "%s" %s' % (
-                self.login, self.timeout, self.user,
-                self.password, self.enable_password, command, self.address)
-        return '%s -t %s -u "%s" -p "%s" -c "%s" %s' % (
+            return '%s -t %s -u "%s" -p "%s" -e "%s" %s -c "%s" %s' % (
+                self.login, self.timeout, self.user, self.password,
+                self.enable_password, self.option, command, self.address)
+        return '%s -t %s -u "%s" -p "%s" %s -c "%s" %s' % (
             self.login, self.timeout, self.user,
-            self.password, command, self.address)
+            self.password, self.option, command, self.address)
 
     def decode_bytes(self, byte_data):
         """Change string with encoding setting.
