@@ -179,6 +179,39 @@ class UnitTests(unittest.TestCase):
                       '-x "commands.txt"',
                       '192.168.1.5']))
 
+    def test_show(self):
+        """Check command string."""
+        import sys
+        cmd = 'show version'
+        try:
+            from StringIO import StringIO
+            out = StringIO()
+            sys.stdout = out
+            self.obj1.show(cmd)
+            output = out.getvalue().strip()
+        except ImportError:
+            import io
+            out = io.StringIO()
+            sys.stdout = out
+            self.obj1.show(cmd)
+            output = out.getvalue().strip()
+
+        self.assertEqual(
+            output,
+            " ".join(['clogin',
+                      '-t',
+                      '10',
+                      '-u',
+                      '"rancid"',
+                      '-p',
+                      '"password"',
+                      '-e',
+                      '"enable_password"',
+                      '',
+                      '-c',
+                      '"show version"',
+                      '192.168.1.1']))
+
     def test_cmd_exec(self):
         """Check excecuter result."""
         res = self.obj1.cmd_exec('echo test')
