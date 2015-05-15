@@ -4,6 +4,7 @@
 
 from subprocess import Popen
 from subprocess import PIPE
+from os.path import expanduser
 import os
 import stat
 
@@ -189,7 +190,7 @@ class RancidCmd(object):
             :str: RANCID settings file path.
 
         """
-        home = os.environ['HOME']
+        home = expanduser("~")
         path = os.path.join(home, name)
         if not os.path.isfile(path):
             RancidCmd.touch(path)
