@@ -129,6 +129,10 @@ class RancidCmd(object):
         return {'std_out': self.decode_bytes(std_out),
                 'std_err': self.decode_bytes(std_err)}
 
+    def show(self, command):
+        """Output command for check."""
+        print(self.generate_cmd(command))
+
     def execute(self, command):
         """Command execution.
 
