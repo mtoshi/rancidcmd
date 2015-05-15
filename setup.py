@@ -76,6 +76,6 @@ setup(
     py_modules=['rancidcmd'],
     install_requires=requires,
     include_package_data=True,
-    tests_require=['tox==1.9.2'],
+    tests_require=['tox'],
     cmdclass={'test': Tox},
 )
