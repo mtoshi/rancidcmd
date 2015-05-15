@@ -88,13 +88,16 @@ class RancidCmd(object):
                 'xlogin -t 10 -u admin -p password -c "show version"'
 
         """
+        if command != '':
+            command = ' -c "%s"' % command
+
+        enable_password = ''
         if self.enable_password:
-            return '%s -t %s -u "%s" -p "%s" -e "%s" %s -c "%s" %s' % (
-                self.login, self.timeout, self.user, self.password,
-                self.enable_password, self.option, command, self.address)
-        return '%s -t %s -u "%s" -p "%s" %s -c "%s" %s' % (
-            self.login, self.timeout, self.user,
-            self.password, self.option, command, self.address)
+            enable_password = ' -e "%s"' % self.enable_password
+
+        return '%s -t %s -u "%s" -p "%s"%s %s%s %s' % (
+            self.login, self.timeout, self.user, self.password,
+            enable_password, self.option, command, self.address)
 
     def decode_bytes(self, byte_data):
         """Change string with encoding setting.
