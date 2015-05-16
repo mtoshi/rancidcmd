@@ -92,7 +92,7 @@ Example for command confirmation (you can use "show" method). ::
 
 This show method will be useful for debug by hands.
 
-* RancidCmd() init args. ::
+RancidCmd() init args. ::
 
     login (str): Login command is xlogin. (such as "clogin, jlogin")
     address (str): Host name or ip address.
