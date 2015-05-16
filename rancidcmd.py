@@ -64,7 +64,7 @@ class RancidCmd(object):
         self.address = kwargs['address']
         self.enable_password = kwargs.get('enable_password', None)
         self.timeout = kwargs.get('timeout', 10)
-        self.option = kwargs.get('option', '')
+        self.option = kwargs.get('option', None)
         self.encoding = 'utf-8'
         RancidCmd.check_cloginrc()
 
@@ -77,9 +77,10 @@ class RancidCmd(object):
         These are for command option and exclusive.
         If "-x" option is specified, then "-c" command is ignored.
         """
-        pat = re.compile(r'(\s+)?-x\s+')
-        if pat.search(self.option):
-            return True
+        if self.option:
+            pat = re.compile(r'(\s+)?-x\s+')
+            if pat.search(self.option):
+                return True
         return False
 
     def generate_cmd(self, command):
@@ -108,13 +109,17 @@ class RancidCmd(object):
         else:
             command = '-c "%s"' % command
 
+        option = ''
+        if self.option:
+            option = self.option
+
         enable_password = ''
         if self.enable_password:
             enable_password = '-e "%s"' % self.enable_password
 
         return '%s -t %s -u "%s" -p "%s" %s %s %s %s' % (
             self.login, self.timeout, self.user, self.password,
-            enable_password, self.option, command, self.address)
+            enable_password, option, command, self.address)
 
     def decode_bytes(self, byte_data):
         """Change string with encoding setting.

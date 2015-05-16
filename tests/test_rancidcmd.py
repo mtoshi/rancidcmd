@@ -55,7 +55,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj1.enable_password, 'enable_password')
         self.assertEqual(self.obj1.address, '192.168.1.1')
         self.assertEqual(self.obj1.timeout, 10)
-        self.assertEqual(self.obj1.option, '')
+        self.assertEqual(self.obj1.option, None)
         self.assertEqual(self.obj1.encoding, 'utf-8')
 
         self.assertEqual(self.obj2.login, 'clogin')
@@ -64,7 +64,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj2.enable_password, 'enable_password')
         self.assertEqual(self.obj2.address, '192.168.1.2')
         self.assertEqual(self.obj2.timeout, 10)
-        self.assertEqual(self.obj2.option, '')
+        self.assertEqual(self.obj2.option, None)
         self.assertEqual(self.obj2.encoding, 'utf-8')
 
         self.assertEqual(self.obj3.login, 'jlogin')
@@ -73,7 +73,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj3.enable_password, None)
         self.assertEqual(self.obj3.address, '192.168.1.3')
         self.assertEqual(self.obj3.timeout, 20)
-        self.assertEqual(self.obj3.option, '')
+        self.assertEqual(self.obj3.option, None)
         self.assertEqual(self.obj3.encoding, 'utf-8')
 
         self.assertEqual(self.obj4.login, 'clogin')
