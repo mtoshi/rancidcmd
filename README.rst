@@ -75,7 +75,17 @@ Example for junos(jlogin). ::
     ...                       address='192.168.1.2')
     >>> rancidcmd.execute("show version")
 
-Example for command confirmation. ::
+Example for Option ("-d" is enable debug mode of jlogin's native function). ::
+
+    >>> from rancidcmd import RancidCmd
+    >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/jlogin',
+    ...                       user='username',
+    ...                       password='xxxx',
+    ...                       option='-d',
+    ...                       address='192.168.1.2')
+    >>> rancidcmd.execute("show version")
+
+Example for command confirmation (you can use "show" method). ::
 
     >>> rancidcmd.show("show version")
     /usr/libexec/rancid/clogin -t 10 -u "username" -p "xxxx" -e "xxxx"  -c "show version" 192.168.1.1
