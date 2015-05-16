@@ -19,11 +19,11 @@ class RancidCmd(object):
         :login (str): RANCID login command(clogin, jlogin, etc).
         :user (str): Login username.
         :password (str): Login password.
-        :address (str): Host name or address.
+        :address (str): Host name or ip address.
         :enable_password (str, optional): Enable password for clogin.
             Default is None.
         :option(int, optional): Option example: '-d -x "commands.txt"'.
-            Default is ''.
+            Default is None.
         :timeout(int, optional): Timeout value(seconds).
             Default is 10 seconds.
         :encoding(str, optional): Encoding type.
@@ -47,11 +47,11 @@ class RancidCmd(object):
             :login (str): RANCID login command(clogin, jlogin, etc).
             :user (str): Login username.
             :password (str): Login password.
-            :address (str): Host name or address.
+            :address (str): Host name or ip address.
             :enable_password (str, optional): Enable password for clogin.
                 Default is None.
             :option(int, optional): Option example: '-d -x "commands.txt"'.
-                Default is ''.
+                Default is None.
             :timeout(int, optional): Timeout value(seconds).
                 Default is 10 seconds.
             :encoding(str, optional): Encoding type.
@@ -156,7 +156,16 @@ class RancidCmd(object):
                 'std_err': self.decode_bytes(std_err)}
 
     def show(self, command):
-        """Output command for check."""
+        """Execute command string check.
+
+        Args:
+
+            :command (str): Example is "show version".
+
+        Returns:
+
+            :str: Return the command string.
+        """
         print(self.generate_cmd(command))
 
     def execute(self, command):
