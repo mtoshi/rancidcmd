@@ -89,8 +89,8 @@ Example for command confirmation (you can use "show" method). ::
 
     >>> rancidcmd.show("show version")
     /usr/libexec/rancid/clogin -t 10 -u "username" -p "xxxx" -e "xxxx"  -c "show version" 192.168.1.1
-
-This show method will be useful for debug by hands.
+    
+    # This show method will be useful for debug by hands.
 
 RancidCmd() init args. ::
 
