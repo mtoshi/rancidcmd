@@ -35,6 +35,18 @@ class UnitTests(unittest.TestCase):
             user='rancid', password='password',
             address='192.168.1.3')
 
+        self.obj4 = RancidCmd(
+            login='clogin',
+            user='rancid', password='password',
+            option='-d',
+            address='192.168.1.4')
+
+        self.obj5 = RancidCmd(
+            login='clogin',
+            user='rancid', password='password',
+            option='-d -x "commands.txt"',
+            address='192.168.1.5')
+
     def test_init(self):
         """check init value."""
         self.assertEqual(self.obj1.login, 'clogin')
@@ -43,6 +55,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj1.enable_password, 'enable_password')
         self.assertEqual(self.obj1.address, '192.168.1.1')
         self.assertEqual(self.obj1.timeout, 10)
+        self.assertEqual(self.obj1.option, None)
         self.assertEqual(self.obj1.encoding, 'utf-8')
 
         self.assertEqual(self.obj2.login, 'clogin')
@@ -51,6 +64,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj2.enable_password, 'enable_password')
         self.assertEqual(self.obj2.address, '192.168.1.2')
         self.assertEqual(self.obj2.timeout, 10)
+        self.assertEqual(self.obj2.option, None)
         self.assertEqual(self.obj2.encoding, 'utf-8')
 
         self.assertEqual(self.obj3.login, 'jlogin')
@@ -59,7 +73,34 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj3.enable_password, None)
         self.assertEqual(self.obj3.address, '192.168.1.3')
         self.assertEqual(self.obj3.timeout, 20)
+        self.assertEqual(self.obj3.option, None)
         self.assertEqual(self.obj3.encoding, 'utf-8')
+
+        self.assertEqual(self.obj4.login, 'clogin')
+        self.assertEqual(self.obj4.user, 'rancid')
+        self.assertEqual(self.obj4.password, 'password')
+        self.assertEqual(self.obj4.enable_password, None)
+        self.assertEqual(self.obj4.address, '192.168.1.4')
+        self.assertEqual(self.obj4.timeout, 10)
+        self.assertEqual(self.obj4.option, '-d')
+        self.assertEqual(self.obj4.encoding, 'utf-8')
+
+        self.assertEqual(self.obj5.login, 'clogin')
+        self.assertEqual(self.obj5.user, 'rancid')
+        self.assertEqual(self.obj5.password, 'password')
+        self.assertEqual(self.obj5.enable_password, None)
+        self.assertEqual(self.obj5.address, '192.168.1.5')
+        self.assertEqual(self.obj5.timeout, 10)
+        self.assertEqual(self.obj5.option, '-d -x "commands.txt"')
+        self.assertEqual(self.obj5.encoding, 'utf-8')
+
+    def test_is_option_x(self):
+        """Check command command option for "-x"."""
+        self.assertEqual(self.obj1.is_option_x(), False)
+        self.assertEqual(self.obj2.is_option_x(), False)
+        self.assertEqual(self.obj3.is_option_x(), False)
+        self.assertEqual(self.obj4.is_option_x(), False)
+        self.assertEqual(self.obj5.is_option_x(), True)
 
     def _test_generate_cmd(self):
         """Check command format."""
@@ -113,6 +154,69 @@ class UnitTests(unittest.TestCase):
                       '-c',
                       'show version',
                       '192.168.1.3']))
+
+        # clogin
+        rancid_cmd = self.obj4.generate_cmd(cmd)
+        self.assertEqual(
+            rancid_cmd,
+            " ".join(['clogin',
+                      '-t',
+                      '10',
+                      '-u',
+                      'rancid',
+                      '-p',
+                      'password',
+                      '-c',
+                      'show version',
+                      '-d',
+                      '192.168.1.4']))
+
+        # clogin
+        rancid_cmd = self.obj5.generate_cmd(cmd)
+        self.assertEqual(
+            rancid_cmd,
+            " ".join(['clogin',
+                      '-t',
+                      '10',
+                      '-u',
+                      'rancid',
+                      '-p',
+                      'password',
+                      '-x "commands.txt"',
+                      '192.168.1.5']))
+
+    def test_show(self):
+        """Check command string."""
+        import sys
+        cmd = 'show version'
+        try:
+            from StringIO import StringIO
+            out = StringIO()
+            sys.stdout = out
+            self.obj1.show(cmd)
+            output = out.getvalue().strip()
+        except ImportError:
+            import io
+            out = io.StringIO()
+            sys.stdout = out
+            self.obj1.show(cmd)
+            output = out.getvalue().strip()
+
+        self.assertEqual(
+            output,
+            " ".join(['clogin',
+                      '-t',
+                      '10',
+                      '-u',
+                      '"rancid"',
+                      '-p',
+                      '"password"',
+                      '-e',
+                      '"enable_password"',
+                      '',
+                      '-c',
+                      '"show version"',
+                      '192.168.1.1']))
 
     def test_cmd_exec(self):
         """Check excecuter result."""

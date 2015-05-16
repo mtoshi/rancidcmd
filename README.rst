@@ -75,11 +75,38 @@ Example for junos(jlogin). ::
     ...                       address='192.168.1.2')
     >>> rancidcmd.execute("show version")
 
-* RancidCmd() needs "login, user, password, enable_password, timeout, address".
-* "enable_password" is not must for jlogin.
-* "enable_password" default value is None.
-* "timeout" is not must.
-* "timeout" default value is 10(sec).
+Example for Option ("-d" is enable debug mode of jlogin's native function). ::
+
+    >>> from rancidcmd import RancidCmd
+    >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/jlogin',
+    ...                       user='username',
+    ...                       password='xxxx',
+    ...                       option='-d',
+    ...                       address='192.168.1.2')
+    >>> rancidcmd.execute("show version")
+
+Example for command confirmation (you can use "show" method). ::
+
+    >>> rancidcmd.show("show version")
+    /usr/libexec/rancid/clogin -t 10 -u "username" -p "xxxx" -e "xxxx"  -c "show version" 192.168.1.1
+    
+    # This show method will be useful for debug by hands.
+
+RancidCmd() init args. ::
+
+    login (str): Login command is xlogin. (such as "clogin, jlogin")
+    address (str): Host name or ip address.
+    user (str): Login user name.
+    password (str): Login user password.
+    enable_password (str): Login user enable password.
+                           Default is None.(**clogin is must.**)
+    option (str): Option is not must.
+                  Deafult is None.
+                  If you set this value to pass directly to clogin.
+    timeout (int): Timeout second value is not must.
+                   Default is 10(sec).
+    encoding (str): Encoding type.
+                    Default is 'utf-8'.
 
 Output format. ::
 
