@@ -6,7 +6,7 @@ python:
 - 3.4
 
 before_script:
-- bash utils/test_setup.sh
+- sudo bash utils/test_setup.sh
 
 install:
 - pip install virtualenv tox coveralls
