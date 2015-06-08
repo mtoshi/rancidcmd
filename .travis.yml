@@ -4,10 +4,16 @@ python:
 - 2.7
 - 3.3
 - 3.4
+
+before_script:
+- bash utils/test_setup.sh
+
 install:
 - pip install virtualenv tox coveralls
+
 script:
 - python setup.py test
 - python setup.py check -r
+
 after_success:
 - coveralls
