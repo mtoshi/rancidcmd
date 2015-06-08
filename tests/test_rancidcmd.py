@@ -223,11 +223,11 @@ class UnitTests(unittest.TestCase):
         res = self.obj1.cmd_exec('echo test')
         self.assertEqual(res, {'std_out': 'test\n',
                                'std_err': '',
-                               'returncode': 0})
+                               'rtn_code': 0})
 
         # Execute not found command.
         res = self.obj1.cmd_exec('_echo test')
-        self.assertNotEqual(res['returncode'], 0)
+        self.assertNotEqual(res['rtn_code'], 0)
 
     def test_execute(self):
         """Check excecute."""

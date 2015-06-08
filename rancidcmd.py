@@ -145,7 +145,7 @@ class RancidCmd(object):
             {
                 'std_err': '',
                 'std_out': '',
-                'returncode': '',
+                'rtn_code': '',
             }
         """
         proc = Popen(command,
@@ -153,10 +153,10 @@ class RancidCmd(object):
                      stdout=PIPE,
                      stderr=PIPE)
         std_out, std_err = proc.communicate()
-        returncode = proc.returncode
+        rtn_code = proc.returncode
         return {'std_out': self.decode_bytes(std_out),
                 'std_err': self.decode_bytes(std_err),
-                'returncode': returncode}
+                'rtn_code': rtn_code}
 
     def show(self, command):
         """Execute command string check.
@@ -185,7 +185,7 @@ class RancidCmd(object):
             {
                 'std_err': '',
                 'std_out': '',
-                'returncode': '',
+                'rtn_code': '',
             }
 
         """
