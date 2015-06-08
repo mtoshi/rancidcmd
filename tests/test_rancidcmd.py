@@ -221,7 +221,13 @@ class UnitTests(unittest.TestCase):
     def test_cmd_exec(self):
         """Check excecuter result."""
         res = self.obj1.cmd_exec('echo test')
-        self.assertEqual(res, {'std_out': 'test\n', 'std_err': ''})
+        self.assertEqual(res, {'std_out': 'test\n',
+                               'std_err': '',
+                               'returncode': 0})
+
+        # Execute not found command.
+        res = self.obj1.cmd_exec('_echo test')
+        self.assertNotEqual(res['returncode'], 0)
 
     def test_execute(self):
         """Check excecute."""
