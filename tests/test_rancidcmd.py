@@ -268,8 +268,9 @@ class UnitTests(unittest.TestCase):
 
     def test_execute(self):
         """Check excecute."""
+        user = pwd.getpwuid(os.getuid())[0]
         obj = RancidCmd(login='/usr/lib/rancid/bin/clogin',
-                        user='rancid',
+                        user=user,
                         password='zebra',
                         enable_password='zebra',
                         address='127.0.0.1')
