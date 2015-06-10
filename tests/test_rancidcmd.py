@@ -274,7 +274,6 @@ class UnitTests(unittest.TestCase):
                         enable_password='zebra',
                         address='127.0.0.1')
         res = obj.execute("show version")
-        print(res)
         self.assertEqual(res['rtn_code'], 0)
 
     def test_touch(self):
