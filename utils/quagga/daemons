@@ -22,7 +22,7 @@
 # that can be changed via /etc/quagga/debian.conf.
 #
 zebra=yes
-bgpd=no
+bgpd=yes
 ospfd=no
 ospf6d=no
 ripd=no
