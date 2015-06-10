@@ -6,6 +6,7 @@
 
 apt-get install -y rancid
 cp -a utils/rancid/cloginrc ~/.cloginrc
+chmod 700 ~/.cloginrc
 
 #
 # quagga install
