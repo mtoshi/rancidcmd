@@ -7,7 +7,8 @@ python:
 
 before_script:
 - sudo bash utils/test_setup.sh
-- netstat -an | grep 2601
+- sudo service quagga status
+- sudo ps aux | grep quagga
 - /usr/lib/rancid/bin/clogin -t 10 -u "travis" -p "zebra" -e "zebra"  -c "show version" 127.0.0.1
 
 install:
