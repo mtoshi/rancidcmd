@@ -5,6 +5,7 @@
 
 import unittest
 import os
+import pwd
 import uuid
 import stat
 from rancidcmd import RancidCmd

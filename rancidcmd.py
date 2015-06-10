@@ -148,8 +148,11 @@ class RancidCmd(object):
                 'rtn_code': '',
             }
         """
+        env = os.environ.copy()
+        env['HOME'] = RancidCmd.get_home_path()
         proc = Popen(command,
                      shell=True,
+                     env=env,
                      stdout=PIPE,
                      stderr=PIPE)
         std_out, std_err = proc.communicate()
@@ -210,6 +213,11 @@ class RancidCmd(object):
             raise
 
     @staticmethod
+    def get_home_path():
+        """Get home directory path."""
+        return expanduser("~")
+
+    @staticmethod
     def check_cloginrc(name='.cloginrc'):
         """Check rancid settings file.
 
@@ -228,7 +236,7 @@ class RancidCmd(object):
             :str: RANCID settings file path.
 
         """
-        home = expanduser("~")
+        home = RancidCmd.get_home_path()
         path = os.path.join(home, name)
         if not os.path.isfile(path):
             RancidCmd.touch(path)
