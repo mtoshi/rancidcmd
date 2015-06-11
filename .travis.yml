@@ -1,12 +1,12 @@
 language: python
-sudo: true
+sudo: false
 python:
 - 2.7
 - 3.3
 - 3.4
 
-before_script:
-- sudo bash utils/test_setup.sh
+# before_script:
+# - sudo bash utils/test_setup.sh
 
 install:
 - pip install virtualenv tox coveralls
