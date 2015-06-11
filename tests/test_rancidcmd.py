@@ -268,14 +268,16 @@ class UnitTests(unittest.TestCase):
 
     def test_execute(self):
         """Check excecute."""
-        user = pwd.getpwuid(os.getuid())[0]
-        obj = RancidCmd(login='/usr/lib/rancid/bin/clogin',
-                        user=user,
-                        password='zebra',
-                        enable_password='zebra',
+        obj = RancidCmd(login='clogin',
+                        user='admin',
+                        password='password',
                         address='127.0.0.1')
-        res = obj.execute("show version")
-        self.assertEqual(res['rtn_code'], 0)
+        res = obj.execute('show version')
+        if res['std_err'] == '':
+            self.assertEqual(res['std_err'], '')
+            self.assertNotEqual(res['std_out'], '')
+        self.assertNotEqual(res['std_err'], '')
+        self.assertEqual(res['std_out'], '')
 
     def test_touch(self):
         """Check make file."""

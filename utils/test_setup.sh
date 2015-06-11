@@ -17,4 +17,4 @@ apt-get install -y quagga
 cp -a utils/quagga/*.conf /etc/quagga/
 cp -a utils/quagga/daemons /etc/quagga/
 
-service quagga 1
+service quagga restart
