@@ -12,8 +12,9 @@ chmod 700 ~/.cloginrc
 # quagga install
 #
 
-mkdir /etc/quagga
+apt-get install -y quagga
+
 cp -a utils/quagga/*.conf /etc/quagga/
 cp -a utils/quagga/daemons /etc/quagga/
 
-apt-get install -y quagga
+service quagga 1
