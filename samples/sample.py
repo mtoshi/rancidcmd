@@ -73,9 +73,10 @@ def main():
 
         res = rancid.execute(node['cmd'])
 
-        if res['std_err'] == '':
-
+        if res['rtn_code'] == 0:
             print(res['std_out'])
+        else:
+            print('[error] %s' % res['std_err'])
 
 
 if __name__ == "__main__":
