@@ -16,7 +16,7 @@ def main():
     clogin = '/usr/libexec/rancid/clogin'
     jlogin = '/usr/libexec/rancid/jlogin'
 
-    # # for Debian
+    # # for Debian/Ubuntu
     # clogin = '/usr/lib/rancid/bin/clogin'
     # jlogin = '/usr/lib/rancid/bin/jlogin'
 
@@ -73,9 +73,10 @@ def main():
 
         res = rancid.execute(node['cmd'])
 
-        if res['std_err'] == '':
-
+        if res['rtn_code'] == 0:
             print(res['std_out'])
+        else:
+            print('[error] %s' % res['std_err'])
 
 
 if __name__ == "__main__":

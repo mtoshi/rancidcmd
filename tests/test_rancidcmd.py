@@ -27,12 +27,12 @@ class UnitTests(unittest.TestCase):
             address='192.168.1.1')
 
         self.obj2 = RancidCmd(
-            login='clogin', user='rancid', timeout=10,
+            login='clogin', user='rancid',
             password='password', enable_password='enable_password',
             address='192.168.1.2')
 
         self.obj3 = RancidCmd(
-            login='jlogin', timeout=20,
+            login='jlogin',
             user='rancid', password='password',
             address='192.168.1.3')
 
@@ -45,7 +45,7 @@ class UnitTests(unittest.TestCase):
         self.obj5 = RancidCmd(
             login='clogin',
             user='rancid', password='password',
-            option='-d -x "commands.txt"',
+            option='-t 30 -d -x "commands.txt"',
             address='192.168.1.5')
 
         self.obj10 = RancidCmd(
@@ -61,7 +61,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj1.password, 'password')
         self.assertEqual(self.obj1.enable_password, 'enable_password')
         self.assertEqual(self.obj1.address, '192.168.1.1')
-        self.assertEqual(self.obj1.timeout, 10)
         self.assertEqual(self.obj1.option, None)
         self.assertEqual(self.obj1.encoding, 'utf-8')
 
@@ -70,7 +69,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj2.password, 'password')
         self.assertEqual(self.obj2.enable_password, 'enable_password')
         self.assertEqual(self.obj2.address, '192.168.1.2')
-        self.assertEqual(self.obj2.timeout, 10)
         self.assertEqual(self.obj2.option, None)
         self.assertEqual(self.obj2.encoding, 'utf-8')
 
@@ -79,7 +77,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj3.password, 'password')
         self.assertEqual(self.obj3.enable_password, None)
         self.assertEqual(self.obj3.address, '192.168.1.3')
-        self.assertEqual(self.obj3.timeout, 20)
         self.assertEqual(self.obj3.option, None)
         self.assertEqual(self.obj3.encoding, 'utf-8')
 
@@ -88,7 +85,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj4.password, 'password')
         self.assertEqual(self.obj4.enable_password, None)
         self.assertEqual(self.obj4.address, '192.168.1.4')
-        self.assertEqual(self.obj4.timeout, 10)
         self.assertEqual(self.obj4.option, '-d')
         self.assertEqual(self.obj4.encoding, 'utf-8')
 
@@ -97,8 +93,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj5.password, 'password')
         self.assertEqual(self.obj5.enable_password, None)
         self.assertEqual(self.obj5.address, '192.168.1.5')
-        self.assertEqual(self.obj5.timeout, 10)
-        self.assertEqual(self.obj5.option, '-d -x "commands.txt"')
+        self.assertEqual(self.obj5.option, '-t 30 -d -x "commands.txt"')
         self.assertEqual(self.obj5.encoding, 'utf-8')
 
         self.assertEqual(self.obj10.login, 'clogin')
@@ -106,7 +101,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj10.password, 'zebra')
         self.assertEqual(self.obj10.enable_password, 'zebra')
         self.assertEqual(self.obj10.address, '127.0.0.1')
-        self.assertEqual(self.obj10.timeout, 10)
         self.assertEqual(self.obj10.option, None)
         self.assertEqual(self.obj10.encoding, 'utf-8')
 
@@ -128,8 +122,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       'rancid',
                       '-p',
@@ -145,8 +137,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       'rancid',
                       '-p',
@@ -162,8 +152,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '30',
                       '-u',
                       'rancid',
                       '-p',
@@ -177,8 +165,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       'rancid',
                       '-p',
@@ -193,8 +179,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       'rancid',
                       '-p',
@@ -207,8 +191,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       'admin',
                       '-p',
@@ -237,8 +219,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             output,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       '"rancid"',
                       '-p',
