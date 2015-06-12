@@ -24,8 +24,6 @@ class RancidCmd(object):
             Default is None.
         :option(int, optional): Option example: '-d -x "commands.txt"'.
             Default is None.
-        :timeout(int, optional): Timeout value(seconds).
-            Default is 10 seconds.
         :encoding(str, optional): Encoding type.
             Default is 'utf-8'.
 
@@ -52,8 +50,6 @@ class RancidCmd(object):
                 Default is None.
             :option(int, optional): Option example: '-d -x "commands.txt"'.
                 Default is None.
-            :timeout(int, optional): Timeout value(seconds).
-                Default is 10 seconds.
             :encoding(str, optional): Encoding type.
                 Default is 'utf-8'.
 
@@ -63,7 +59,6 @@ class RancidCmd(object):
         self.password = kwargs['password']
         self.address = kwargs['address']
         self.enable_password = kwargs.get('enable_password', None)
-        self.timeout = kwargs.get('timeout', 10)
         self.option = kwargs.get('option', None)
         self.encoding = 'utf-8'
         RancidCmd.check_cloginrc()
@@ -96,12 +91,12 @@ class RancidCmd(object):
 
             If there is the "enable_password". ::
 
-                'xlogin -t 10 -u admin -p password -e enable_password
+                'xlogin -u admin -p password -e enable_password
                     -c "show version"'
 
             If you have not set the "enable_password". ::
 
-                'xlogin -t 10 -u admin -p password -c "show version"'
+                'xlogin -u admin -p password -c "show version"'
 
         """
         if self.is_option_x():
@@ -117,8 +112,8 @@ class RancidCmd(object):
         if self.enable_password:
             enable_password = '-e "%s"' % self.enable_password
 
-        return '%s -t %s -u "%s" -p "%s" %s %s %s %s' % (
-            self.login, self.timeout, self.user, self.password,
+        return '%s -u "%s" -p "%s" %s %s %s %s' % (
+            self.login, self.user, self.password,
             enable_password, option, command, self.address)
 
     def decode_bytes(self, byte_data):
@@ -145,15 +140,21 @@ class RancidCmd(object):
             {
                 'std_err': '',
                 'std_out': '',
+                'rtn_code': '',
             }
         """
+        env = os.environ.copy()
+        env['HOME'] = RancidCmd.get_home_path()
         proc = Popen(command,
                      shell=True,
+                     env=env,
                      stdout=PIPE,
                      stderr=PIPE)
         std_out, std_err = proc.communicate()
+        rtn_code = proc.returncode
         return {'std_out': self.decode_bytes(std_out),
-                'std_err': self.decode_bytes(std_err)}
+                'std_err': self.decode_bytes(std_err),
+                'rtn_code': rtn_code}
 
     def show(self, command):
         """Execute command string check.
@@ -182,6 +183,7 @@ class RancidCmd(object):
             {
                 'std_err': '',
                 'std_out': '',
+                'rtn_code': '',
             }
 
         """
@@ -206,6 +208,17 @@ class RancidCmd(object):
             raise
 
     @staticmethod
+    def get_home_path():
+        """Get home directory path.
+
+        Returns:
+
+            :str: User home directory path.
+
+        """
+        return expanduser("~")
+
+    @staticmethod
     def check_cloginrc(name='.cloginrc'):
         """Check rancid settings file.
 
@@ -224,7 +237,7 @@ class RancidCmd(object):
             :str: RANCID settings file path.
 
         """
-        home = expanduser("~")
+        home = RancidCmd.get_home_path()
         path = os.path.join(home, name)
         if not os.path.isfile(path):
             RancidCmd.touch(path)

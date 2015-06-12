@@ -5,6 +5,7 @@
 
 import unittest
 import os
+import pwd
 import uuid
 import stat
 from rancidcmd import RancidCmd
@@ -26,12 +27,12 @@ class UnitTests(unittest.TestCase):
             address='192.168.1.1')
 
         self.obj2 = RancidCmd(
-            login='clogin', user='rancid', timeout=10,
+            login='clogin', user='rancid',
             password='password', enable_password='enable_password',
             address='192.168.1.2')
 
         self.obj3 = RancidCmd(
-            login='jlogin', timeout=20,
+            login='jlogin',
             user='rancid', password='password',
             address='192.168.1.3')
 
@@ -44,8 +45,14 @@ class UnitTests(unittest.TestCase):
         self.obj5 = RancidCmd(
             login='clogin',
             user='rancid', password='password',
-            option='-d -x "commands.txt"',
+            option='-t 30 -d -x "commands.txt"',
             address='192.168.1.5')
+
+        self.obj10 = RancidCmd(
+            login='clogin',
+            user='admin',
+            password='zebra', enable_password='zebra',
+            address='127.0.0.1')
 
     def test_init(self):
         """check init value."""
@@ -54,7 +61,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj1.password, 'password')
         self.assertEqual(self.obj1.enable_password, 'enable_password')
         self.assertEqual(self.obj1.address, '192.168.1.1')
-        self.assertEqual(self.obj1.timeout, 10)
         self.assertEqual(self.obj1.option, None)
         self.assertEqual(self.obj1.encoding, 'utf-8')
 
@@ -63,7 +69,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj2.password, 'password')
         self.assertEqual(self.obj2.enable_password, 'enable_password')
         self.assertEqual(self.obj2.address, '192.168.1.2')
-        self.assertEqual(self.obj2.timeout, 10)
         self.assertEqual(self.obj2.option, None)
         self.assertEqual(self.obj2.encoding, 'utf-8')
 
@@ -72,7 +77,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj3.password, 'password')
         self.assertEqual(self.obj3.enable_password, None)
         self.assertEqual(self.obj3.address, '192.168.1.3')
-        self.assertEqual(self.obj3.timeout, 20)
         self.assertEqual(self.obj3.option, None)
         self.assertEqual(self.obj3.encoding, 'utf-8')
 
@@ -81,7 +85,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj4.password, 'password')
         self.assertEqual(self.obj4.enable_password, None)
         self.assertEqual(self.obj4.address, '192.168.1.4')
-        self.assertEqual(self.obj4.timeout, 10)
         self.assertEqual(self.obj4.option, '-d')
         self.assertEqual(self.obj4.encoding, 'utf-8')
 
@@ -90,9 +93,16 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj5.password, 'password')
         self.assertEqual(self.obj5.enable_password, None)
         self.assertEqual(self.obj5.address, '192.168.1.5')
-        self.assertEqual(self.obj5.timeout, 10)
-        self.assertEqual(self.obj5.option, '-d -x "commands.txt"')
+        self.assertEqual(self.obj5.option, '-t 30 -d -x "commands.txt"')
         self.assertEqual(self.obj5.encoding, 'utf-8')
+
+        self.assertEqual(self.obj10.login, 'clogin')
+        self.assertEqual(self.obj10.user, 'admin')
+        self.assertEqual(self.obj10.password, 'zebra')
+        self.assertEqual(self.obj10.enable_password, 'zebra')
+        self.assertEqual(self.obj10.address, '127.0.0.1')
+        self.assertEqual(self.obj10.option, None)
+        self.assertEqual(self.obj10.encoding, 'utf-8')
 
     def test_is_option_x(self):
         """Check command command option for "-x"."""
@@ -101,6 +111,7 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj3.is_option_x(), False)
         self.assertEqual(self.obj4.is_option_x(), False)
         self.assertEqual(self.obj5.is_option_x(), True)
+        self.assertEqual(self.obj10.is_option_x(), False)
 
     def _test_generate_cmd(self):
         """Check command format."""
@@ -111,8 +122,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       'rancid',
                       '-p',
@@ -128,8 +137,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       'rancid',
                       '-p',
@@ -145,8 +152,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '30',
                       '-u',
                       'rancid',
                       '-p',
@@ -160,8 +165,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       'rancid',
                       '-p',
@@ -176,14 +179,25 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             rancid_cmd,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       'rancid',
                       '-p',
                       'password',
                       '-x "commands.txt"',
                       '192.168.1.5']))
+
+        # clogin
+        rancid_cmd = self.obj10.generate_cmd(cmd)
+        self.assertEqual(
+            rancid_cmd,
+            " ".join(['clogin',
+                      '-u',
+                      'admin',
+                      '-p',
+                      'zebra',
+                      '-e',
+                      'zebra',
+                      '127.0.0.1']))
 
     def test_show(self):
         """Check command string."""
@@ -205,8 +219,6 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(
             output,
             " ".join(['clogin',
-                      '-t',
-                      '10',
                       '-u',
                       '"rancid"',
                       '-p',
@@ -218,10 +230,21 @@ class UnitTests(unittest.TestCase):
                       '"show version"',
                       '192.168.1.1']))
 
+    def test_get_home_path(self):
+        """Check user directory path."""
+        path = RancidCmd.get_home_path()
+        _path = pwd.getpwuid(os.getuid())[5]
+        self.assertEqual(path, _path)
+
     def test_cmd_exec(self):
         """Check excecuter result."""
+        # Execute true command.
         res = self.obj1.cmd_exec('echo test')
-        self.assertEqual(res, {'std_out': 'test\n', 'std_err': ''})
+        self.assertEqual(res['rtn_code'], 0)
+
+        # Execute not found command.
+        res = self.obj1.cmd_exec('_echo test')
+        self.assertNotEqual(res['rtn_code'], 0)
 
     def test_execute(self):
         """Check excecute."""
