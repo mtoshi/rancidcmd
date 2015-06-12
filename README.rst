@@ -106,7 +106,7 @@ RancidCmd() init args. ::
 
 Output format. ::
 
-    {'rtn_code': '', 'std_err': '', 'std_out': ''}
+    {'rtn_code': int, 'std_err': str, 'std_out': str}
 
 Output sucess sample. ::
 

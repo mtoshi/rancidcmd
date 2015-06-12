@@ -70,9 +70,7 @@ def main():
                     address=node['addr'])
 
         rancid = RancidCmd(**args)
-
         res = rancid.execute(node['cmd'])
-
         if res['rtn_code'] == 0:
             print(res['std_out'])
         else:
