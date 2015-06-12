@@ -127,7 +127,15 @@ Please see sample code.
 
 If you want to use another settings(prompt, method, etc), please edit ".cloginrc" same with previus.
 
+Recently almost network devices can use ssh login. If you use ssh to priority, then you should write below into ".cloginrc". ::
 
+    # All targets first action is ssh.
+    add method * ssh telnet
+    
+    or
+    
+    # For specific targets.
+    add method 192.168.1.* ssh telnet
 
 See also
 =========
