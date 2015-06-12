@@ -16,7 +16,7 @@ def main():
     clogin = '/usr/libexec/rancid/clogin'
     jlogin = '/usr/libexec/rancid/jlogin'
 
-    # # for Debian
+    # # for Debian/Ubuntu
     # clogin = '/usr/lib/rancid/bin/clogin'
     # jlogin = '/usr/lib/rancid/bin/jlogin'
 
