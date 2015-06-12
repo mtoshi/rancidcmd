@@ -61,7 +61,6 @@ Example for cisco(clogin). ::
     ...                       user='username',
     ...                       password='xxxx',
     ...                       enable_password='xxxx',
-    ...                       timeout=10,
     ...                       address='192.168.1.1')
     >>> rancidcmd.execute("show version")
 
@@ -71,24 +70,23 @@ Example for junos(jlogin). ::
     >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/jlogin',
     ...                       user='username',
     ...                       password='xxxx',
-    ...                       timeout=30,
     ...                       address='192.168.1.2')
     >>> rancidcmd.execute("show version")
 
-Example for Option ("-d" is enable debug mode of jlogin's native function). ::
+Example for Option ("-d" is enable debug mode and "-t 45" is timeout 45 seconds.). ::
 
     >>> from rancidcmd import RancidCmd
     >>> rancidcmd = RancidCmd(login='/usr/libexec/rancid/jlogin',
     ...                       user='username',
     ...                       password='xxxx',
-    ...                       option='-d',
+    ...                       option='-d -t 45',
     ...                       address='192.168.1.2')
     >>> rancidcmd.execute("show version")
 
 Example for command confirmation (you can use "show" method). ::
 
     >>> rancidcmd.show("show version")
-    /usr/libexec/rancid/clogin -t 10 -u "username" -p "xxxx" -e "xxxx"  -c "show version" 192.168.1.1
+    /usr/libexec/rancid/clogin -u "username" -p "xxxx" -e "xxxx"  -c "show version" 192.168.1.1
     
     # This show method will be useful for debug by hands.
 
@@ -103,8 +101,6 @@ RancidCmd() init args. ::
     option (str): Option is not must.
                   Deafult is None.
                   If you set this value to pass directly to clogin.
-    timeout (int): Timeout second value is not must.
-                   Default is 10(sec).
     encoding (str): Encoding type.
                     Default is 'utf-8'.
 
