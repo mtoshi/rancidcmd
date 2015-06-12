@@ -4,7 +4,7 @@ rancidcmd
 
 Rancidcmd is a utility tool for network operators.
 This module is wrapper of RANCID login commands.(like cloing, jlogin ...)
-So if you use this moudle, then you have to install RANCID in some way.
+So if you use this module, then you have to install RANCID in some way.
 Why did I make this module? As everybody knows RANCID is popular as auto login solutions.
 Of course I want to use RANCID. And I wanted to do using without password of ".cloginrc".
 This Rancidcmd can use RANCID login command like a clogin with empty ".clgoinrc".
@@ -110,15 +110,19 @@ RancidCmd() init args. ::
 
 Output format. ::
 
-    {'std_err': '', 'std_out': ''}
+    {'rtn_code': '', 'std_err': '', 'std_out': ''}
 
 Output sucess sample. ::
 
-    {'std_err': '', 'std_out': '... Copyright (c) 2002-2013, Cisco Systems, Inc. All ...'}
+    {'rtn_code': 0,
+     'std_err': '',
+     'std_out': '... Copyright (c) 2002-2013, Cisco Systems, Inc. All ...'}
 
 Output error sample. (Not found "clogin") ::
 
-    {'std_err': '/bin/sh: clogin: command not fond\n', 'std_out': ''}
+    {'rtn_code': 1,
+     'std_err': '/bin/sh: clogin: command not fond\n',
+     'std_out': ''}
 
 Please see sample code.
 
