@@ -214,7 +214,13 @@ class RancidCmd(object):
 
     @staticmethod
     def get_home_path():
-        """Get home directory path."""
+        """Get home directory path.
+
+        Returns:
+
+            :str: User home directory path.
+
+        """
         return expanduser("~")
 
     @staticmethod
