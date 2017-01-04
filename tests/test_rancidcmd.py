@@ -221,7 +221,27 @@ class UnitTests(unittest.TestCase):
 
         self.assertEqual(cmd1, cmd2)
 
-    def test_show(self):
+    def test_show_config(self):
+        """Check config string."""
+        import sys
+        try:
+            from StringIO import StringIO
+            out = StringIO()
+        except ImportError:
+            import io
+            out = io.StringIO()
+
+        sys.stdout = out
+        self.obj1.show_config()
+        output = out.getvalue().strip()
+
+        vals = [u'add user 192.168.1.1 rancid',
+                u'add method 192.168.1.1 {telnet:23}',
+                u'add password 192.168.1.1 password enable_password']
+
+        self.assertEqual(output, "\n".join(vals))
+
+    def test_show_command(self):
         """Check command string."""
         import sys
         cmd = 'show version'
@@ -233,23 +253,13 @@ class UnitTests(unittest.TestCase):
             out = io.StringIO()
 
         sys.stdout = out
-        self.obj1.show(cmd)
+        self.obj1.show_command(cmd)
         temp = self.obj1.cloginrc
         output = out.getvalue().strip()
 
-        vals = [u'#',
-                u'# config',
-                u'#',
-                u'add user 192.168.1.1 rancid',
-                u'add method 192.168.1.1 {telnet:23}',
-                u'add password 192.168.1.1 password enable_password',
-                u'#',
-                u'# command',
-                u'#',
-                u'clogin -c "show version" -f {0} 192.168.1.1'.format(
-                    temp.name)]
+        val = u'clogin -c "show version" -f {0} 192.168.1.1'.format(temp.name)
 
-        self.assertEqual(output, "\n".join(vals))
+        self.assertEqual(output, val)
 
     def test_get_home_path(self):
         """Check user directory path."""

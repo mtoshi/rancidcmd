@@ -160,7 +160,16 @@ class RancidCmd(object):
                 'std_err': self.decode_bytes(std_err),
                 'rtn_code': rtn_code}
 
-    def show(self, command):
+    def show_config(self):
+        """cloginrc string check.
+
+        Returns:
+
+            :str: Return cloginrc config string.
+        """
+        print(self.cloginrc.read().decode('utf-8'))
+
+    def show_command(self, command):
         """Execute command string check.
 
         Args:
@@ -171,13 +180,6 @@ class RancidCmd(object):
 
             :str: Return the command string.
         """
-        print(u'#')
-        print(u'# config')
-        print(u'#')
-        print(self.cloginrc.read().decode('utf-8'))
-        print(u'#')
-        print(u'# command')
-        print(u'#')
         print(self.generate_cmd(command))
 
     def execute(self, command):
