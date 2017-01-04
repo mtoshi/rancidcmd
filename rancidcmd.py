@@ -59,6 +59,8 @@ class RancidCmd(object):
         self.user = kwargs['user']
         self.password = kwargs['password']
         self.address = kwargs['address']
+        self.port = kwargs.get('port', 23)
+        self.method = kwargs.get('method', u'telnet')
         self.enable_password = kwargs.get('enable_password', None)
         self.option = kwargs.get('option', None)
         self.encoding = 'utf-8'
@@ -238,13 +240,17 @@ class RancidCmd(object):
         home = RancidCmd.get_home_path()
         path = os.path.join(home, name)
         if not os.path.isfile(path):
+
+            add_method = u'add method {host} {{{method}:{port}}}'.format(
+                host=self.address, method=self.method, port=self.port)
+
             if self.enable_password:
-                passwd = u'add password * {0}'.format(self.password)
+                add_passwd = u'add password * {0} {1}'.format(
+                    self.password, self.enable_password)
             else:
-                passwd = u'add password * {0} {1}'.format(self.password,
-                                                          self.enable_password)
+                add_passwd = u'add password * {0}'.format(self.password)
 
             with open(path, 'w') as _file:
-                _file.write(passwd)
-            os.chmod(path, 0700)
+                _file.write('\n'.join([add_method, add_passwd]))
+            os.chmod(path, stat.S_IRUSR)
         return path
