@@ -105,13 +105,13 @@ class RancidCmd(object):
         option = ''
         if self.option:
             option = self.option
-            return '{login} -u "{user}" {opt} {cmd} {addr}'.format(
+            return '{login} -u "{user}" {opt} {cmd} -f {path} {addr}'.format(
                 login=self.login, user=self.user, opt=option,
-                cmd=command, addr=self.address)
+                path=self.cloginrc_path, cmd=command, addr=self.address)
 
-        return '{login} -u "{user}" {cmd} {addr}'.format(
+        return '{login} -u "{user}" {cmd} -f {path} {addr}'.format(
             login=self.login, user=self.user,
-            cmd=command, addr=self.address)
+            path=self.cloginrc_path, cmd=command, addr=self.address)
 
     def decode_bytes(self, byte_data):
         """Change string with encoding setting.
