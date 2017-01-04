@@ -64,8 +64,10 @@ class RancidCmd(object):
         self.enable_password = kwargs.get('enable_password', None)
         self.option = kwargs.get('option', None)
         self.encoding = 'utf-8'
+        self.default_native_cloginrc_path = RancidCmd.make_default_native_cloginrc_path()  # NOQA
+        self.native_cloginrc_path = kwargs.get(
+            u'native_cloginrc_path', self.default_native_cloginrc_path)
         self.cloginrc = self.make_cloginrc()
-        # RancidCmd.check_cloginrc()
 
     def is_option_x(self):
         """Check -x option.
@@ -221,11 +223,8 @@ class RancidCmd(object):
     @staticmethod
     def get_home_path():
         """Get home directory path.
-
         Returns:
-
             :str: User home directory path.
-
         """
         return expanduser("~")
 
@@ -251,23 +250,54 @@ class RancidCmd(object):
 
         temp = tempfile.NamedTemporaryFile()
 
-        add_user = u'add user {host} {user}'.format(
-            host=host, user=user)
+        native_cloginrc = self.check_native_cloginrc()
+        if native_cloginrc:
 
-        add_method = u'add method {host} {{{method}:{port}}}'.format(
-            host=host, method=method, port=port)
+            content = native_cloginrc
 
-        if self.enable_password:
-            add_passwd = u'add password {host} {passwd} {epasswd}'.format(
-                host=host, passwd=passwd, epasswd=epasswd)
         else:
-            add_passwd = u'add password {host} {passwd}'.format(
-                host=host, passwd=passwd)
 
-        content = '\n'.join([add_user, add_method, add_passwd])
+            add_user = u'add user {host} {user}'.format(
+                host=host, user=user)
+
+            add_method = u'add method {host} {{{method}:{port}}}'.format(
+                host=host, method=method, port=port)
+
+            if self.enable_password:
+                add_passwd = u'add password {host} {passwd} {epasswd}'.format(
+                    host=host, passwd=passwd, epasswd=epasswd)
+            else:
+                add_passwd = u'add password {host} {passwd}'.format(
+                    host=host, passwd=passwd)
+
+            content = '\n'.join([add_user, add_method, add_passwd])
+
         temp.write(content.encode('utf-8'))
         temp.seek(0)
 
         os.chmod(temp.name, stat.S_IRUSR)
 
         return temp
+
+    def check_native_cloginrc(self):
+        """Check native settings file.
+        Note:
+            If RANCID settings file is not exists,
+            then make empty settings file.
+        Args:
+            :name (str, optional): RANCID settings file name.
+                 Default is ".cloginrc".
+        Returns:
+            :str: RANCID settings file text.
+        """
+        path = self.native_cloginrc_path
+        if os.path.isfile(path):
+            with open(path, u'r') as _file:
+                return _file.read()
+        return None
+
+    @staticmethod
+    def make_default_native_cloginrc_path(name='.cloginrc'):
+        """Make native settings file."""
+        home = RancidCmd.get_home_path()
+        return os.path.join(home, name)
