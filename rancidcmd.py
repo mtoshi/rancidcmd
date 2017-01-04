@@ -8,7 +8,7 @@ from os.path import expanduser
 import os
 import re
 import stat
-import uuid
+import tempfile
 
 
 class RancidCmd(object):
@@ -64,7 +64,7 @@ class RancidCmd(object):
         self.enable_password = kwargs.get('enable_password', None)
         self.option = kwargs.get('option', None)
         self.encoding = 'utf-8'
-        self.cloginrc_path = self.make_cloginrc()
+        self.cloginrc = self.make_cloginrc()
         # RancidCmd.check_cloginrc()
 
     def is_option_x(self):
@@ -110,9 +110,9 @@ class RancidCmd(object):
             res.append(self.option)
         if command:
             res.append(command)
-        if self.cloginrc_path:
+        if self.cloginrc:
             res.append('-f')
-            res.append(self.cloginrc_path)
+            res.append(self.cloginrc.name)
         if self.address:
             res.append(self.address)
 
@@ -169,6 +169,13 @@ class RancidCmd(object):
 
             :str: Return the command string.
         """
+        print(u'#')
+        print(u'# config')
+        print(u'#')
+        print(self.cloginrc.read().decode('utf-8'))
+        print(u'#')
+        print(u'# command')
+        print(u'#')
         print(self.generate_cmd(command))
 
     def execute(self, command):
@@ -191,7 +198,7 @@ class RancidCmd(object):
         """
         cmd = self.generate_cmd(command)
         res = self.cmd_exec(cmd)
-        os.remove(self.cloginrc_path)
+        self.cloginrc.close()
         return res
 
     @staticmethod
@@ -240,24 +247,32 @@ class RancidCmd(object):
             :str: RANCID settings file path.
 
         """
-        name = '.cloginrc_{0}'.format(uuid.uuid4())
-        home = RancidCmd.get_home_path()
-        path = os.path.join(home, name)
-        if not os.path.isfile(path):
+        user = self.user
+        host = self.address
+        port = self.port
+        passwd = self.password
+        epasswd = self.enable_password
+        method = self.method
 
-            add_user = u'add user {host} {user}'.format(
-                host=self.address, user=self.user)
+        temp = tempfile.NamedTemporaryFile()
 
-            add_method = u'add method {host} {{{method}:{port}}}'.format(
-                host=self.address, method=self.method, port=self.port)
+        add_user = u'add user {host} {user}'.format(
+            host=host, user=user)
 
-            if self.enable_password:
-                add_passwd = u'add password * {0} {1}'.format(
-                    self.password, self.enable_password)
-            else:
-                add_passwd = u'add password * {0}'.format(self.password)
+        add_method = u'add method {host} {{{method}:{port}}}'.format(
+            host=host, method=method, port=port)
 
-            with open(path, 'w') as _file:
-                _file.write('\n'.join([add_user, add_method, add_passwd]))
-            os.chmod(path, stat.S_IRUSR)
-        return path
+        if self.enable_password:
+            add_passwd = u'add password {host} {passwd} {epasswd}'.format(
+                host=host, passwd=passwd, epasswd=epasswd)
+        else:
+            add_passwd = u'add password {host} {passwd}'.format(
+                host=host, passwd=passwd)
+
+        content = '\n'.join([add_user, add_method, add_passwd])
+        temp.write(content.encode('utf-8'))
+        temp.seek(0)
+
+        os.chmod(temp.name, stat.S_IRUSR)
+
+        return temp

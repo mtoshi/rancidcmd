@@ -149,74 +149,74 @@ class UnitTests(unittest.TestCase):
 
         # clogin
         cmd1 = self.obj1.generate_cmd(cmd)
-        path = self.obj1.cloginrc_path
+        temp = self.obj1.cloginrc
         cmd2 = " ".join(['clogin',
                          '-c',
                          '"show version"',
                          '-f',
-                         path,
+                         temp.name,
                          '192.168.1.1'])
 
         self.assertEqual(cmd1, cmd2)
 
         # clogin
         cmd1 = self.obj2.generate_cmd(cmd)
-        path = self.obj2.cloginrc_path
+        temp = self.obj2.cloginrc
         cmd2 = " ".join(['clogin',
                          '-c',
                          '"show version"',
                          '-f',
-                         path,
+                         temp.name,
                          '192.168.1.2'])
 
         self.assertEqual(cmd1, cmd2)
 
         # jlogin
         cmd1 = self.obj3.generate_cmd(cmd)
-        path = self.obj3.cloginrc_path
+        temp = self.obj3.cloginrc
         cmd2 = " ".join(['jlogin',
                          '-c',
                          '"show version"',
                          '-f',
-                         path,
+                         temp.name,
                          '192.168.1.3'])
 
         self.assertEqual(cmd1, cmd2)
 
         # clogin
         cmd1 = self.obj4.generate_cmd(cmd)
-        path = self.obj4.cloginrc_path
+        temp = self.obj4.cloginrc
         cmd2 = " ".join(['clogin',
                          '-d',
                          '-c',
                          '"show version"',
                          '-f',
-                         path,
+                         temp.name,
                          '192.168.1.4'])
 
         self.assertEqual(cmd1, cmd2)
 
         # clogin
         cmd1 = self.obj5.generate_cmd(cmd)
-        path = self.obj5.cloginrc_path
+        temp = self.obj5.cloginrc
         cmd2 = " ".join(['clogin',
                          '-t 30',
                          '-d',
                          '-x "commands.txt"',
                          '-f',
-                         path,
+                         temp.name,
                          '192.168.1.5'])
 
         self.assertEqual(cmd1, cmd2)
 
         # clogin
         cmd1 = self.obj10.generate_cmd(cmd)
-        path = self.obj10.cloginrc_path
+        temp = self.obj10.cloginrc
         cmd2 = " ".join(['clogin',
                          '-c',
                          '"show version"',
                          '-f',
-                         path,
+                         temp.name,
                          '127.0.0.1'])
 
         self.assertEqual(cmd1, cmd2)
@@ -234,17 +234,22 @@ class UnitTests(unittest.TestCase):
 
         sys.stdout = out
         self.obj1.show(cmd)
-        path = self.obj1.cloginrc_path
+        temp = self.obj1.cloginrc
         output = out.getvalue().strip()
 
-        self.assertEqual(
-            output,
-            " ".join(['clogin',
-                      '-c',
-                      '"show version"',
-                      '-f',
-                      path,
-                      '192.168.1.1']))
+        vals = [u'#',
+                u'# config',
+                u'#',
+                u'add user 192.168.1.1 rancid',
+                u'add method 192.168.1.1 {telnet:23}',
+                u'add password 192.168.1.1 password enable_password',
+                u'#',
+                u'# command',
+                u'#',
+                u'clogin -c "show version" -f {0} 192.168.1.1'.format(
+                    temp.name)]
+
+        self.assertEqual(output, "\n".join(vals))
 
     def test_get_home_path(self):
         """Check user directory path."""
