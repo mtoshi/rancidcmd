@@ -235,16 +235,11 @@ class RancidCmd(object):
         Note:
 
             If RANCID settings file is not exists,
-            then make empty settings file.
-
-        Args:
-
-            :name (str, optional): RANCID settings file name.
-                 Default is ".cloginrc".
+            then make temporary settings file.
 
         Returns:
 
-            :str: RANCID settings file path.
+            :NamedTemporaryFile: RANCID settings tempfile object.
 
         """
         user = self.user
