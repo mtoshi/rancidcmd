@@ -56,18 +56,21 @@ class RancidCmd(object):
 
         """
         self.login = kwargs['login']
-        self.user = kwargs['user']
-        self.password = kwargs['password']
         self.address = kwargs['address']
-        self.port = kwargs.get('port', 23)
-        self.method = kwargs.get('method', u'telnet')
-        self.enable_password = kwargs.get('enable_password', None)
-        self.option = kwargs.get('option', None)
         self.encoding = 'utf-8'
         self.default_native_cloginrc_path = RancidCmd.make_default_native_cloginrc_path()  # NOQA
         self.native_cloginrc_path = kwargs.get(
             u'native_cloginrc_path', self.default_native_cloginrc_path)
-        self.cloginrc = self.make_cloginrc()
+        native_cloginrc = self.check_native_cloginrc()
+
+        if native_cloginrc is None:
+            self.user = kwargs['user']
+            self.password = kwargs['password']
+            self.port = kwargs.get('port', 23)
+            self.method = kwargs.get('method', u'telnet')
+            self.enable_password = kwargs.get('enable_password', None)
+            self.option = kwargs.get('option', None)
+        self.cloginrc = self.make_cloginrc(native_cloginrc)
 
     def is_option_x(self):
         """Check -x option.
@@ -106,16 +109,16 @@ class RancidCmd(object):
             command = '-c "%s"' % command
 
         res = []
-        if self.login:
+        if hasattr(self, "login"):
             res.append(self.login)
         if self.option:
             res.append(self.option)
         if command:
             res.append(command)
-        if self.cloginrc:
+        if hasattr(self, "cloginrc"):
             res.append('-f')
             res.append(self.cloginrc.name)
-        if self.address:
+        if hasattr(self, "address"):
             res.append(self.address)
 
         return u' '.join(res)
@@ -230,7 +233,8 @@ class RancidCmd(object):
         """
         return expanduser("~")
 
-    def make_cloginrc(self):
+    def make_cloginrc(self, cloginrc_config):
+
         """Check rancid settings file.
 
         Note:
@@ -243,21 +247,15 @@ class RancidCmd(object):
             :NamedTemporaryFile: RANCID settings tempfile object.
 
         """
-        user = self.user
-        host = self.address
-        port = self.port
-        passwd = self.password
-        epasswd = self.enable_password
-        method = self.method
-
         temp = tempfile.NamedTemporaryFile()
 
-        native_cloginrc = self.check_native_cloginrc()
-        if native_cloginrc:
-
-            content = native_cloginrc
-
-        else:
+        if cloginrc_config is None:
+            user = self.user
+            host = self.address
+            port = self.port
+            passwd = self.password
+            epasswd = self.enable_password
+            method = self.method
 
             add_user = u'add user {host} {user}'.format(
                 host=host, user=user)
@@ -272,9 +270,9 @@ class RancidCmd(object):
                 add_passwd = u'add password {host} {passwd}'.format(
                     host=host, passwd=passwd)
 
-            content = '\n'.join([add_user, add_method, add_passwd])
+            cloginrc_config = '\n'.join([add_user, add_method, add_passwd])
 
-        temp.write(content.encode('utf-8'))
+        temp.write(cloginrc_config.encode('utf-8'))
         temp.seek(0)
 
         os.chmod(temp.name, stat.S_IRUSR)
