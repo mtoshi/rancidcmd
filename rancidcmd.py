@@ -86,7 +86,6 @@ class RancidCmd(object):
         Args:
 
             :command (str): Example is "show version".
-            :cloginrc_path (str): Example is ".cloginrc_randompath".
 
         Returns:
 
