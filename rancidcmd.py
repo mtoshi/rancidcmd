@@ -81,10 +81,11 @@ class RancidCmd(object):
         These are for command option and exclusive.
         If "-x" option is specified, then "-c" command is ignored.
         """
-        if self.option:
-            pat = re.compile(r'(\s+)?-x\s+')
-            if pat.search(self.option):
-                return True
+        if hasattr(self, u'option'):
+            if self.option:
+                pat = re.compile(r'(\s+)?-x\s+')
+                if pat.search(self.option):
+                    return True
         return False
 
     def generate_cmd(self, command):
@@ -111,8 +112,9 @@ class RancidCmd(object):
         res = []
         if hasattr(self, "login"):
             res.append(self.login)
-        if self.option:
-            res.append(self.option)
+        if hasattr(self, u'option'):
+            if self.option:
+                res.append(self.option)
         if command:
             res.append(command)
         if hasattr(self, "cloginrc"):
