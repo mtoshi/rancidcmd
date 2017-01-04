@@ -124,10 +124,6 @@ class UnitTests(unittest.TestCase):
             " ".join(['clogin',
                       '-u',
                       'rancid',
-                      '-p',
-                      'password',
-                      '-e',
-                      'enable_password',
                       '-c',
                       'show version',
                       '192.168.1.1']))
@@ -139,10 +135,6 @@ class UnitTests(unittest.TestCase):
             " ".join(['clogin',
                       '-u',
                       'rancid',
-                      '-p',
-                      'password',
-                      '-e',
-                      'enable_password',
                       '-c',
                       'show version',
                       '192.168.1.2']))
@@ -154,8 +146,6 @@ class UnitTests(unittest.TestCase):
             " ".join(['clogin',
                       '-u',
                       'rancid',
-                      '-p',
-                      'password',
                       '-c',
                       'show version',
                       '192.168.1.3']))
@@ -167,8 +157,6 @@ class UnitTests(unittest.TestCase):
             " ".join(['clogin',
                       '-u',
                       'rancid',
-                      '-p',
-                      'password',
                       '-c',
                       'show version',
                       '-d',
@@ -181,8 +169,6 @@ class UnitTests(unittest.TestCase):
             " ".join(['clogin',
                       '-u',
                       'rancid',
-                      '-p',
-                      'password',
                       '-x "commands.txt"',
                       '192.168.1.5']))
 
@@ -193,8 +179,6 @@ class UnitTests(unittest.TestCase):
             " ".join(['clogin',
                       '-u',
                       'admin',
-                      '-p',
-                      'zebra',
                       '-e',
                       'zebra',
                       '127.0.0.1']))
@@ -221,11 +205,6 @@ class UnitTests(unittest.TestCase):
             " ".join(['clogin',
                       '-u',
                       '"rancid"',
-                      '-p',
-                      '"password"',
-                      '-e',
-                      '"enable_password"',
-                      '',
                       '-c',
                       '"show version"',
                       '192.168.1.1']))
@@ -280,16 +259,16 @@ class UnitTests(unittest.TestCase):
         finally:
             os.remove(path)
 
-    def test_check_cloginrc(self):
-        """Check cloginrc setting file."""
-        name = '_test_cloginrc'
-        path = RancidCmd.check_cloginrc(name=name)
-        is_exists = os.path.isfile(path)
-        mode = os.stat(path).st_mode
-        if is_exists:
-            os.remove(path)
-        self.assertEqual(is_exists, True)
-        self.assertEqual(mode, 33216)  # oct(33216) == '0o100700'
+    # def test_check_cloginrc(self):
+    #     """Check cloginrc setting file."""
+    #     name = '_test_cloginrc'
+    #     path = RancidCmd.check_cloginrc(name=name)
+    #     is_exists = os.path.isfile(path)
+    #     mode = os.stat(path).st_mode
+    #     if is_exists:
+    #         os.remove(path)
+    #     self.assertEqual(is_exists, True)
+    #     self.assertEqual(mode, 33216)  # oct(33216) == '0o100700'
 
     def test_decode_bytes(self):
         """Check byte and str changing."""

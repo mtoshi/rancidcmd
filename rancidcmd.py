@@ -8,6 +8,7 @@ from os.path import expanduser
 import os
 import re
 import stat
+import uuid
 
 
 class RancidCmd(object):
@@ -61,7 +62,8 @@ class RancidCmd(object):
         self.enable_password = kwargs.get('enable_password', None)
         self.option = kwargs.get('option', None)
         self.encoding = 'utf-8'
-        RancidCmd.check_cloginrc()
+        self.cloginrc_path = self.make_cloginrc()
+        # RancidCmd.check_cloginrc()
 
     def is_option_x(self):
         """Check -x option.
@@ -84,6 +86,7 @@ class RancidCmd(object):
         Args:
 
             :command (str): Example is "show version".
+            :cloginrc_path (str): Example is ".cloginrc_randompath".
 
         Returns:
 
@@ -91,12 +94,7 @@ class RancidCmd(object):
 
             If there is the "enable_password". ::
 
-                'xlogin -u admin -p password -e enable_password
-                    -c "show version"'
-
-            If you have not set the "enable_password". ::
-
-                'xlogin -u admin -p password -c "show version"'
+                'xlogin -u admin -c "show version"'
 
         """
         if self.is_option_x():
@@ -107,14 +105,13 @@ class RancidCmd(object):
         option = ''
         if self.option:
             option = self.option
+            return '{login} -u "{user}" {opt} {cmd} {addr}'.format(
+                login=self.login, user=self.user, opt=option,
+                cmd=command, addr=self.address)
 
-        enable_password = ''
-        if self.enable_password:
-            enable_password = '-e "%s"' % self.enable_password
-
-        return '%s -u "%s" -p "%s" %s %s %s %s' % (
-            self.login, self.user, self.password,
-            enable_password, option, command, self.address)
+        return '{login} -u "{user}" {cmd} {addr}'.format(
+            login=self.login, user=self.user,
+            cmd=command, addr=self.address)
 
     def decode_bytes(self, byte_data):
         """Change string with encoding setting.
@@ -188,7 +185,9 @@ class RancidCmd(object):
 
         """
         cmd = self.generate_cmd(command)
-        return self.cmd_exec(cmd)
+        res = self.cmd_exec(cmd)
+        os.remove(self.cloginrc_path)
+        return res
 
     @staticmethod
     def touch(path):
@@ -218,8 +217,7 @@ class RancidCmd(object):
         """
         return expanduser("~")
 
-    @staticmethod
-    def check_cloginrc(name='.cloginrc'):
+    def make_cloginrc(self):
         """Check rancid settings file.
 
         Note:
@@ -237,8 +235,16 @@ class RancidCmd(object):
             :str: RANCID settings file path.
 
         """
+        name = '.cloginrc_{0}'.format(uuid.uuid4())
         home = RancidCmd.get_home_path()
         path = os.path.join(home, name)
         if not os.path.isfile(path):
-            RancidCmd.touch(path)
+            if self.enable_password:
+                passwd = u'add password * {0}'.format(self.password)
+            else:
+                passwd = u'add password * {0} {1}'.format(self.password,
+                                                          self.enable_password)
+
+            with open(path, 'w') as _file:
+                _file.write(passwd)
         return path
