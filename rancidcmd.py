@@ -246,4 +246,5 @@ class RancidCmd(object):
 
             with open(path, 'w') as _file:
                 _file.write(passwd)
+            os.chmod(path, 0700)
         return path
