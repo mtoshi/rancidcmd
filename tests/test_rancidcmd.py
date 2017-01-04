@@ -22,37 +22,55 @@ class UnitTests(unittest.TestCase):
     def setUp(self):
         """setup."""
         self.obj1 = RancidCmd(
-            login='clogin', user='rancid',
-            password='password', enable_password='enable_password',
+            login='clogin',
+            user='rancid',
+            password='password',
+            enable_password='enable_password',
             address='192.168.1.1')
 
         self.obj2 = RancidCmd(
-            login='clogin', user='rancid',
-            password='password', enable_password='enable_password',
-            address='192.168.1.2')
+            login='clogin',
+            user='rancid',
+            password='password',
+            enable_password='enable_password',
+            address='192.168.1.2',
+            port=23,
+            method=u'telnet')
 
         self.obj3 = RancidCmd(
             login='jlogin',
-            user='rancid', password='password',
-            address='192.168.1.3')
+            user='rancid',
+            password='password',
+            address='192.168.1.3',
+            port=23,
+            method=u'telnet')
 
         self.obj4 = RancidCmd(
             login='clogin',
-            user='rancid', password='password',
+            user='rancid',
+            password='password',
             option='-d',
-            address='192.168.1.4')
+            address='192.168.1.4',
+            port=22,
+            method=u'ssh')
 
         self.obj5 = RancidCmd(
             login='clogin',
-            user='rancid', password='password',
+            user='rancid',
+            password='password',
             option='-t 30 -d -x "commands.txt"',
-            address='192.168.1.5')
+            address='192.168.1.5',
+            port=22,
+            method=u'ssh')
 
         self.obj10 = RancidCmd(
             login='clogin',
             user='admin',
-            password='zebra', enable_password='zebra',
-            address='127.0.0.1')
+            password='zebra',
+            enable_password='zebra',
+            address='127.0.0.1',
+            port=2601,
+            method=u'telnet')
 
     def test_init(self):
         """check init value."""
@@ -61,6 +79,8 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj1.password, 'password')
         self.assertEqual(self.obj1.enable_password, 'enable_password')
         self.assertEqual(self.obj1.address, '192.168.1.1')
+        self.assertEqual(self.obj1.port, 23)
+        self.assertEqual(self.obj1.method, 'telnet')
         self.assertEqual(self.obj1.option, None)
         self.assertEqual(self.obj1.encoding, 'utf-8')
 
@@ -69,6 +89,8 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj2.password, 'password')
         self.assertEqual(self.obj2.enable_password, 'enable_password')
         self.assertEqual(self.obj2.address, '192.168.1.2')
+        self.assertEqual(self.obj2.port, 23)
+        self.assertEqual(self.obj2.method, 'telnet')
         self.assertEqual(self.obj2.option, None)
         self.assertEqual(self.obj2.encoding, 'utf-8')
 
@@ -77,6 +99,8 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj3.password, 'password')
         self.assertEqual(self.obj3.enable_password, None)
         self.assertEqual(self.obj3.address, '192.168.1.3')
+        self.assertEqual(self.obj3.port, 23)
+        self.assertEqual(self.obj3.method, 'telnet')
         self.assertEqual(self.obj3.option, None)
         self.assertEqual(self.obj3.encoding, 'utf-8')
 
@@ -85,6 +109,8 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj4.password, 'password')
         self.assertEqual(self.obj4.enable_password, None)
         self.assertEqual(self.obj4.address, '192.168.1.4')
+        self.assertEqual(self.obj4.port, 22)
+        self.assertEqual(self.obj4.method, 'ssh')
         self.assertEqual(self.obj4.option, '-d')
         self.assertEqual(self.obj4.encoding, 'utf-8')
 
@@ -93,6 +119,8 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj5.password, 'password')
         self.assertEqual(self.obj5.enable_password, None)
         self.assertEqual(self.obj5.address, '192.168.1.5')
+        self.assertEqual(self.obj5.port, 22)
+        self.assertEqual(self.obj5.method, 'ssh')
         self.assertEqual(self.obj5.option, '-t 30 -d -x "commands.txt"')
         self.assertEqual(self.obj5.encoding, 'utf-8')
 
@@ -101,6 +129,8 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj10.password, 'zebra')
         self.assertEqual(self.obj10.enable_password, 'zebra')
         self.assertEqual(self.obj10.address, '127.0.0.1')
+        self.assertEqual(self.obj10.port, 2601)
+        self.assertEqual(self.obj10.method, 'telnet')
         self.assertEqual(self.obj10.option, None)
         self.assertEqual(self.obj10.encoding, 'utf-8')
 
@@ -113,75 +143,83 @@ class UnitTests(unittest.TestCase):
         self.assertEqual(self.obj5.is_option_x(), True)
         self.assertEqual(self.obj10.is_option_x(), False)
 
-    def _test_generate_cmd(self):
+    def test_generate_cmd(self):
         """Check command format."""
         cmd = 'show version'
 
         # clogin
-        rancid_cmd = self.obj1.generate_cmd(cmd)
-        self.assertEqual(
-            rancid_cmd,
-            " ".join(['clogin',
-                      '-u',
-                      'rancid',
-                      '-c',
-                      'show version',
-                      '192.168.1.1']))
+        cmd1 = self.obj1.generate_cmd(cmd)
+        path = self.obj1.cloginrc_path
+        cmd2 = " ".join(['clogin',
+                         '-c',
+                         '"show version"',
+                         '-f',
+                         path,
+                         '192.168.1.1'])
+
+        self.assertEqual(cmd1, cmd2)
 
         # clogin
-        rancid_cmd = self.obj1.generate_cmd(cmd)
-        self.assertEqual(
-            rancid_cmd,
-            " ".join(['clogin',
-                      '-u',
-                      'rancid',
-                      '-c',
-                      'show version',
-                      '192.168.1.2']))
+        cmd1 = self.obj2.generate_cmd(cmd)
+        path = self.obj2.cloginrc_path
+        cmd2 = " ".join(['clogin',
+                         '-c',
+                         '"show version"',
+                         '-f',
+                         path,
+                         '192.168.1.2'])
+
+        self.assertEqual(cmd1, cmd2)
 
         # jlogin
-        rancid_cmd = self.obj3.generate_cmd(cmd)
-        self.assertEqual(
-            rancid_cmd,
-            " ".join(['clogin',
-                      '-u',
-                      'rancid',
-                      '-c',
-                      'show version',
-                      '192.168.1.3']))
+        cmd1 = self.obj3.generate_cmd(cmd)
+        path = self.obj3.cloginrc_path
+        cmd2 = " ".join(['jlogin',
+                         '-c',
+                         '"show version"',
+                         '-f',
+                         path,
+                         '192.168.1.3'])
+
+        self.assertEqual(cmd1, cmd2)
 
         # clogin
-        rancid_cmd = self.obj4.generate_cmd(cmd)
-        self.assertEqual(
-            rancid_cmd,
-            " ".join(['clogin',
-                      '-u',
-                      'rancid',
-                      '-c',
-                      'show version',
-                      '-d',
-                      '192.168.1.4']))
+        cmd1 = self.obj4.generate_cmd(cmd)
+        path = self.obj4.cloginrc_path
+        cmd2 = " ".join(['clogin',
+                         '-d',
+                         '-c',
+                         '"show version"',
+                         '-f',
+                         path,
+                         '192.168.1.4'])
+
+        self.assertEqual(cmd1, cmd2)
 
         # clogin
-        rancid_cmd = self.obj5.generate_cmd(cmd)
-        self.assertEqual(
-            rancid_cmd,
-            " ".join(['clogin',
-                      '-u',
-                      'rancid',
-                      '-x "commands.txt"',
-                      '192.168.1.5']))
+        cmd1 = self.obj5.generate_cmd(cmd)
+        path = self.obj5.cloginrc_path
+        cmd2 = " ".join(['clogin',
+                         '-t 30',
+                         '-d',
+                         '-x "commands.txt"',
+                         '-f',
+                         path,
+                         '192.168.1.5'])
+
+        self.assertEqual(cmd1, cmd2)
 
         # clogin
-        rancid_cmd = self.obj10.generate_cmd(cmd)
-        self.assertEqual(
-            rancid_cmd,
-            " ".join(['clogin',
-                      '-u',
-                      'admin',
-                      '-e',
-                      'zebra',
-                      '127.0.0.1']))
+        cmd1 = self.obj10.generate_cmd(cmd)
+        path = self.obj10.cloginrc_path
+        cmd2 = " ".join(['clogin',
+                         '-c',
+                         '"show version"',
+                         '-f',
+                         path,
+                         '127.0.0.1'])
+
+        self.assertEqual(cmd1, cmd2)
 
     def test_show(self):
         """Check command string."""
@@ -190,23 +228,22 @@ class UnitTests(unittest.TestCase):
         try:
             from StringIO import StringIO
             out = StringIO()
-            sys.stdout = out
-            self.obj1.show(cmd)
-            output = out.getvalue().strip()
         except ImportError:
             import io
             out = io.StringIO()
-            sys.stdout = out
-            self.obj1.show(cmd)
-            output = out.getvalue().strip()
+
+        sys.stdout = out
+        self.obj1.show(cmd)
+        path = self.obj1.cloginrc_path
+        output = out.getvalue().strip()
 
         self.assertEqual(
             output,
             " ".join(['clogin',
-                      '-u',
-                      '"rancid"',
                       '-c',
                       '"show version"',
+                      '-f',
+                      path,
                       '192.168.1.1']))
 
     def test_get_home_path(self):

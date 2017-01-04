@@ -103,16 +103,20 @@ class RancidCmd(object):
         else:
             command = '-c "%s"' % command
 
-        option = ''
+        res = []
+        if self.login:
+            res.append(self.login)
         if self.option:
-            option = self.option
-            return '{login} -u "{user}" {opt} {cmd} -f {path} {addr}'.format(
-                login=self.login, user=self.user, opt=option,
-                path=self.cloginrc_path, cmd=command, addr=self.address)
+            res.append(self.option)
+        if command:
+            res.append(command)
+        if self.cloginrc_path:
+            res.append('-f')
+            res.append(self.cloginrc_path)
+        if self.address:
+            res.append(self.address)
 
-        return '{login} -u "{user}" {cmd} -f {path} {addr}'.format(
-            login=self.login, user=self.user,
-            path=self.cloginrc_path, cmd=command, addr=self.address)
+        return u' '.join(res)
 
     def decode_bytes(self, byte_data):
         """Change string with encoding setting.
@@ -241,6 +245,9 @@ class RancidCmd(object):
         path = os.path.join(home, name)
         if not os.path.isfile(path):
 
+            add_user = u'add user {host} {user}'.format(
+                host=self.address, user=self.user)
+
             add_method = u'add method {host} {{{method}:{port}}}'.format(
                 host=self.address, method=self.method, port=self.port)
 
@@ -251,6 +258,6 @@ class RancidCmd(object):
                 add_passwd = u'add password * {0}'.format(self.password)
 
             with open(path, 'w') as _file:
-                _file.write('\n'.join([add_method, add_passwd]))
+                _file.write('\n'.join([add_user, add_method, add_passwd]))
             os.chmod(path, stat.S_IRUSR)
         return path
