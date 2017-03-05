@@ -5,9 +5,9 @@ rancidcmd
 Rancidcmd is a utility tool for network operators.
 This module is wrapper of RANCID login commands.(like cloing, jlogin ...)
 So if you use this module, then you have to install RANCID in some way.
-Why did I make this module? As everybody knows RANCID is popular as auto login solutions.
-Of course I want to use RANCID. And I wanted to do using without password of ".cloginrc".
-This Rancidcmd can use RANCID login command like a clogin with empty ".clgoinrc".
+Why did I make this module?  I wanted to do using without password of ".cloginrc".
+This Rancidcmd makes temporary ".clgoinrc" from python code with each excecution.
+If already ".clgoinrc" is present, use ".clgoinrc" with priority.
 
 .. image:: https://secure.travis-ci.org/mtoshi/rancidcmd.svg?branch=master
    :target: http://travis-ci.org/mtoshi/rancidcmd
@@ -50,7 +50,8 @@ Installation
          $ sudo python setup.py install
 
 * Care of "~/.cloginrc" existence is not necessary.
-    If executed user doesn't have "~/.cloginrc", then Rancidcmd makes empty "~/.cloginrc".
+    If executed user doesn't have "~/.cloginrc", then Rancidcmd makes temporary ".cloginrc".
+    If already ".clgoinrc" is present, use ".clgoinrc" with priority.
 
 Using example
 ==============
