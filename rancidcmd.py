@@ -211,23 +211,6 @@ class RancidCmd(object):
         return res
 
     @staticmethod
-    def touch(path):
-        """Make empty file.
-
-        Args:
-
-           :path (str): File path.
-
-        """
-        try:
-            with open(path, 'a'):
-                os.utime(path, None)
-                os.chmod(path, stat.S_IRUSR | stat.S_IWUSR | stat.S_IXUSR)
-        except:
-            print('[error] Could not write "%s".' % path)
-            raise
-
-    @staticmethod
     def get_home_path():
         """Get home directory path.
         Returns:
@@ -284,16 +267,17 @@ class RancidCmd(object):
     def check_native_cloginrc(self):
         """Check native settings file.
         Note:
-            If RANCID settings file is not exists,
-            then make empty settings file.
-        Args:
-            :name (str, optional): RANCID settings file name.
-                 Default is ".cloginrc".
+            If RANCID settings file is not exists or empty,
+            then make temporary cloginrc file.
+            So this method is for check cloginrc file.
+
         Returns:
             :str: RANCID settings file text.
         """
         path = self.native_cloginrc_path
         if os.path.isfile(path):
+            if os.path.getsize(path) == 0:
+                return None
             with open(path, u'r') as _file:
                 return _file.read()
         return None

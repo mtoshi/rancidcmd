@@ -6,8 +6,6 @@
 import unittest
 import os
 import pwd
-import uuid
-import stat
 from rancidcmd import RancidCmd
 
 
@@ -289,38 +287,6 @@ class UnitTests(unittest.TestCase):
             self.assertNotEqual(res['std_out'], '')
         self.assertNotEqual(res['std_err'], '')
         self.assertEqual(res['std_out'], '')
-
-    def test_touch(self):
-        """Check make file."""
-        path = '%s.txt' % uuid.uuid4()
-        RancidCmd.touch(path)
-        is_exists = os.path.isfile(path)
-        if is_exists:
-            os.remove(path)
-        self.assertEqual(is_exists, True)
-
-    def test_touch_permission_error(self):
-        """Check file permission error."""
-        try:
-            path = '%s.txt' % uuid.uuid4()
-            with open(path, 'a'):
-                os.utime(path, None)
-                os.chmod(path, stat.S_IRUSR | stat.S_IXUSR)
-            with self.assertRaises(Exception):
-                RancidCmd.touch(path)
-        finally:
-            os.remove(path)
-
-    # def test_check_cloginrc(self):
-    #     """Check cloginrc setting file."""
-    #     name = '_test_cloginrc'
-    #     path = RancidCmd.check_cloginrc(name=name)
-    #     is_exists = os.path.isfile(path)
-    #     mode = os.stat(path).st_mode
-    #     if is_exists:
-    #         os.remove(path)
-    #     self.assertEqual(is_exists, True)
-    #     self.assertEqual(mode, 33216)  # oct(33216) == '0o100700'
 
     def test_decode_bytes(self):
         """Check byte and str changing."""
