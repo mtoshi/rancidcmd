@@ -21,8 +21,8 @@ def main():
     # jlogin = '/usr/lib/rancid/bin/jlogin'
 
     # # for Mac OS X
-    # clogin = '/opt/local/libexec/rancid/bin/clogin'
-    # jlogin = '/opt/local/libexec/rancid/bin/jlogin'
+    # clogin = '/opt/local/libexec/rancid/clogin'
+    # jlogin = '/opt/local/libexec/rancid/jlogin'
 
     #################################################
     # Node Info #####################################
