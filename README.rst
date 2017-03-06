@@ -13,14 +13,14 @@ If already ".clgoinrc" is present, use ".clgoinrc" with priority.
    :target: http://travis-ci.org/mtoshi/rancidcmd
 .. image:: https://coveralls.io/repos/mtoshi/rancidcmd/badge.svg?branch=coverall
    :target: https://coveralls.io/r/mtoshi/rancidcmd?branch=coverall
-.. image:: https://pypip.in/version/rancidcmd/badge.svg
+.. image:: https://badge.fury.io/py/rancidcmd.svg
    :target: https://pypi.python.org/pypi/rancidcmd/
    :alt: Latest Version
 
 Requirements
 =============
 
-- Python 2.7, 3.3, 3.4, PyPy
+- Python 2.7, 3.3, 3.4, 3.5, PyPy
 
 
 Installation
