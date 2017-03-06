@@ -4,6 +4,7 @@ python:
 - 2.7
 - 3.3
 - 3.4
+- 3.5
 
 # before_script:
 # - sudo bash utils/test_setup.sh
