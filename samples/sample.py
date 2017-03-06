@@ -21,8 +21,8 @@ def main():
     # jlogin = '/usr/lib/rancid/bin/jlogin'
 
     # # for Mac OS X
-    # clogin = '/opt/local/libexec/rancid/bin/clogin'
-    # jlogin = '/opt/local/libexec/rancid/bin/jlogin'
+    # clogin = '/opt/local/libexec/rancid/clogin'
+    # jlogin = '/opt/local/libexec/rancid/jlogin'
 
     #################################################
     # Node Info #####################################
@@ -37,6 +37,8 @@ def main():
 
         {'name': 'Router1',
          'addr': '192.168.1.1',
+         'port': 23,
+         'method': 'telnet',
          'cmd': cmd,
          'password': password,
          'enable_password': enable_password,
@@ -44,6 +46,8 @@ def main():
 
         {'name': 'Router2',
          'addr': '192.168.1.2',
+         'port': 22,
+         'method': 'ssh',
          'cmd': cmd,
          'password': password,
          'enable_password': None,
@@ -51,10 +55,12 @@ def main():
 
         {'name': 'Router3',
          'addr': '192.168.1.3',
+         'port': 2601,
+         'method': 'telnet',
          'cmd': cmd,
          'password': password,
          'enable_password': None,
-         'login': jlogin},
+         'login': clogin},
     ]
 
     #################################################
@@ -67,7 +73,9 @@ def main():
                     password=node['password'],
                     enable_password=node['enable_password'],
                     login=node['login'],
-                    address=node['addr'])
+                    address=node['addr'],
+                    port=node['port'],
+                    method=node['method'])
 
         rancid = RancidCmd(**args)
         res = rancid.execute(node['cmd'])
