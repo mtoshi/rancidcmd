@@ -20,7 +20,7 @@ If already ".clgoinrc" is present, use ".clgoinrc" with priority.
 Requirements
 =============
 
-- Python 2.7, 3.3, 3.4, 3.5, PyPy
+- Python 2.7, 3.4, 3.5, PyPy
 
 
 Installation
